@@ -19,6 +19,12 @@ type
       const c: char=#9); static;
 
     function getSubDataDir(const s: string): string;
+    function get(const url, fname: string;
+      const encode: TEncoding; const force: boolean=false;
+        const cb: TGetStrProc=nil): String;
+    function getGBK(const url, fname: string;
+      const force: boolean=false;
+        const cb: TGetStrProc=nil): String;
   public
     property FileText: TMyTextFile read FFileText;
     property StopFunc: TBooleanFunc write FStopFunc;
@@ -28,19 +34,66 @@ type
 implementation
 
 //uses uCarBrand, System.json, uCharSplit;
-uses uCharSplit;
+uses uCharSplit, System.Net.HttpClientComponent, uNetHttpClt;
 
 { TCarParserBase }
 
 constructor TCarParserBase.Create(const fileName: string);
 begin
   inherited create;
-  FFileText := TMyTextFile.Create;
+  FFileText := TMyTextFile.Create(fileName);
 end;
 
 destructor TCarParserBase.Destroy;
 begin
   FFileText.free;
+end;
+
+function TCarParserBase.get(const url, fname: string; const encode: TEncoding;
+  const force: boolean; const cb: TGetStrProc): String;
+begin
+  Result := g_NetHttpClt.get(url, fname, encode, force, cb);
+end;
+
+{  function get(httpClt: TNetHttpClient): string;
+  var ss: TStringStream;
+  begin
+    ss := TStringStream.Create('', encode);
+    try
+      if Assigned(cb) then begin
+        cb('get' + #9 + url);
+      end;
+      try
+        httpClt.Get(url, ss);
+        Result := ss.DataString;
+        //
+        //ss.SaveToFile(fname);
+        //WriteToFile(Result, fname, TEncoding.UTF8);
+      except
+        on e: Exception do begin
+          //WriteToFile(e.Message, 'c:/1.log', TEncoding.UTF8);
+          Result := '';
+        end;
+      end;
+    finally
+      ss.Free;
+    end;
+  end;
+
+var httpClt: TNetHttpClient;
+begin
+  httpClt := TNetHttpClient.Create(nil);
+  try
+    Result := get(httpClt);
+  finally
+    httpClt.Free;
+  end;
+end;}
+
+function TCarParserBase.getGBK(const url, fname: string; const force: boolean;
+  const cb: TGetStrProc): String;
+begin
+  Result := get(url, fname, TEncoding.GetEncoding(936), force, cb);
 end;
 
 function TCarParserBase.getSubDataDir(const s: string): string;

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, ComCtrls, ToolWin, Menus, Generics.Collections,
   Vcl.Samples.Spin, uCarType, uCarSys, uCarBrand, uFrmSetting,
-  uMyTextFile, uNetHttpClt, uCarBrandParser, uCarSysParser, uCarTypeParser,
+  uMyTextFile, uCarBrandParser, uCarSysParser, uCarTypeParser,
   uCarParParser, uCarCfgParser;
 
 type
@@ -71,6 +71,7 @@ type
     { Private declarations }
     frmSetting: TfrmSetting;
     FDataDir: string;
+    g_hit: integer;
     //
     FCarBrandPaser: TCarBrandParser;
     FCarSysPaser: TCarSysParser;
@@ -78,9 +79,17 @@ type
     //
     FCarParParser: TCarParParser;
     FCarCfgParser: TCarCfgParser;
-    FNetHttpClt: TNetHttpClt;
     procedure setStatus(const S: string; const setCap: boolean=false;
       const tmSleep: integer=0);
+    procedure doUrlEvent(const S: string);
+    procedure doUrlEvent2(const S: string);
+    procedure addLog(const S: string);
+    class function getAppFileName(const S: string): string;
+    procedure addLogMod(const S: string; const nmod: integer);
+    function getStopFlag(): boolean;
+    function isDoNew(): boolean;
+    class function getAppSubFile(const dir, S: string): string; static;
+    function getSubDataDir(const S: string): string;
     // brand
     procedure doReqBrand(const url: string; const brandOnly: boolean);
     // cartype
@@ -88,18 +97,10 @@ type
     // detail
     function doReqCarDetail(const carBrand: TCarBrand; const carSys: TCarSys;
       var carType: TCarType): boolean;
-    function getSubDataDir(const S: string): string;
-    procedure doUrlEvent(const S: string);
-    procedure addLog(const S: string);
-    class function getAppFileName(const S: string): string;
-    procedure addLogMod(const S: string; const nmod: integer);
-    function isDoNew(): boolean;
-    class function getAppSubFile(const dir, S: string): string; static;
     function doOneBrand(const brand: TCarBrand): boolean;
     function doOneBrandTest(const brand: TCarBrand): boolean;
     function reqCarSysdRaw(const brand: TCarBrand;
       const brandOnly: boolean): boolean;
-    function getStopFlag(): boolean;
   public
     { Public declarations }
   end;
@@ -109,8 +110,7 @@ var
 
 implementation
 
-uses StrUtils, uPaserUtils, uCharSplit, System.json, Generics.Defaults,
-  uCarConfig, uCarParam, uStrUtils;
+uses StrUtils, uCharSplit, System.json, Generics.Defaults, uCarConfig, uCarParam, uStrUtils;
 
 {$R *.dfm}
 
@@ -214,12 +214,21 @@ begin
   str := carType.car_brand_name + '/' + carType.car_oem_name + '/' +
     carType.car_serie_name + '/' +
     carType.car_type_name + '/' +
-    carType.car_type_id + '/' + carType.year_model;
-  self.setStatus(str);
+    carType.RawId + '/' + carType.year_model;
+  //self.setStatus(str);
+  self.doUrlEvent2(str);
+  if (g_hit=1) then begin
+    //self.doUrlEvent(carType.RawId);
+    g_hit := 2;
+  end;
+  if SameText(carType.RawId, '32046') then begin
+    //self.doUrlEvent(carType.RawId);
+    g_hit := 1;
+  end;
   //
-  FCarParParser.reqParerToList(FNetHttpClt, carBrand, carSys, carType,
+  FCarParParser.reqParerToList(carBrand, carSys, carType,
     cbxPar.checked, doUrlEvent);
-  FCarCfgParser.reqParerToList(FNetHttpClt, carBrand, carSys, carType,
+  FCarCfgParser.reqParerToList(carBrand, carSys, carType,
     cbxCfg.checked, doUrlEvent);
   Result := true;
 end;
@@ -227,7 +236,7 @@ end;
 function TfrmMain.doReqCarType(const carBrand: TCarBrand; const carSys: TCarSys): boolean;
 var S: string;
 begin
-  S := FCarTypePaser.preParerToList(self.FNetHttpClt, carBrand, carSys, isDoNew, doUrlEvent);
+  S := FCarTypePaser.preParerToList(carBrand, carSys, isDoNew, doUrlEvent);
   FCarTypePaser.parerToList(S, carBrand, carSys, doReqCarDetail, isDoNew);
   Result := true;
 end;
@@ -237,7 +246,7 @@ function TfrmMain.reqCarSysdRaw(const brand: TCarBrand; const brandOnly: boolean
   procedure doReqCarSys(const carBrand: TCarBrand);
   var S: string;
   begin
-    S := FCarSysPaser.reqParerToList(FNetHttpClt, carBrand, isDoNew(), doUrlEvent);
+    S := FCarSysPaser.reqParerToList(carBrand, isDoNew(), doUrlEvent);
     // to parse car-system
     FCarSysPaser.parerToList(S, carBrand, doReqCarType, isDoNew());
   end;
@@ -273,12 +282,12 @@ begin
   memoBrand.clear;
   memoBrand.Lines.add(TCarBrand.getColumn());
   //
-  FCarBrandPaser.FileText.Rewrite_;
-  FCarSysPaser.FileText.Rewrite_;
-  FCarTypePaser.FileText.Rewrite_;
+  FCarBrandPaser.FileText.Rewrite_(true);
+  FCarSysPaser.FileText.Rewrite_(true);
+  FCarTypePaser.FileText.Rewrite_(self.cbxCarType.Checked);
   //
-  FCarParParser.FileText.Rewrite_;
-  FCarCfgParser.FileText.Rewrite_;
+  FCarParParser.FileText.Rewrite_(self.cbxPar.Checked);
+  FCarCfgParser.FileText.Rewrite_(self.cbxCfg.Checked);
   //
   FCarTypePaser.MapCarTypeRaw.Clear;
   try
@@ -289,7 +298,7 @@ begin
       fname := getSubDataDir('carbrand' + '.txt');
       memoFactRepl.Lines.Text := memoFactRepl.Lines.Text.Replace('其它', '其他');
     end;
-    S := FNetHttpClt.get(url, fname, false, doUrlEvent);
+    S := FCarBrandPaser.getGBK(url, fname, false, doUrlEvent);
     FCarSysPaser.loadFactReplIt(memoFactRepl.Lines);
     if brandOnly then begin
       FCarBrandPaser.parerToList(S, doOneBrandTest, isDoNew());
@@ -313,40 +322,42 @@ begin
   addLog(S);
 end;
 
+procedure TfrmMain.doUrlEvent2(const S: string);
+begin
+  //addLog(S);
+end;
+
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   FDataDir := 'ul_data';
-  //FHost := 'http://www.che168.com/';
+  g_hit := 0;
   //
   frmSetting := TfrmSetting.Create(self);
   frmSetting.setFPath(self.getSubDataDir(''));
   //
-  FNetHttpClt := TNetHttpClt.Create(TEncoding.GetEncoding(936));
-  //
   FCarBrandPaser := TCarBrandParser.Create(self.getSubDataDir('car-brand-all.txt'));
-  FCarBrandPaser.StopFunc := getStopFlag;
   FCarBrandPaser.DataFullPath := self.getSubDataDir('');
+  FCarBrandPaser.StopFunc := getStopFlag;
   //
   FCarSysPaser := TCarSysParser.Create(self.getSubDataDir('car-serie-all.txt'));
-  FCarSysPaser.loadCarSysRmBrd(memoCarSysRmBrd.Lines);
   FCarSysPaser.DataFullPath := self.getSubDataDir('');
   FCarSysPaser.StopFunc := getStopFlag;
+  FCarSysPaser.loadCarSysRmBrd(memoCarSysRmBrd.Lines);
   //
   FCarTypePaser := TCarTypeParser.Create(self.getSubDataDir('cartype-all.txt'));
+  FCarTypePaser.DataFullPath := self.getSubDataDir('');
+  FCarTypePaser.StopFunc := getStopFlag;
   FCarTypePaser.loadDicVehType(memoVehType.Lines);
   FCarTypePaser.loadDicVehTypeId(memoVehTypeId.Lines);
-  FCarTypePaser.StopFunc := getStopFlag;
-  FCarTypePaser.DataFullPath := self.getSubDataDir('');
   //
   FCarCfgParser := TCarCfgParser.Create(self.getSubDataDir('cartype-cfg_all.txt'));
+  FCarCfgParser.DataFullPath := self.getSubDataDir('');
   FCarParParser := TCarParParser.Create(self.getSubDataDir('cartype-par_all.txt'));
   FCarParParser.DataFullPath := self.getSubDataDir('');
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
-  FNetHttpClt.Free;
-  //
   FCarBrandPaser.Free;
   FCarSysPaser.Free;
   FCarTypePaser.Free;

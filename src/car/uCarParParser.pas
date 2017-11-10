@@ -11,9 +11,9 @@ type
   public
     constructor Create(const fileName: string);
     destructor Destroy; override;
-    //
+    //                                   const clt: TNetHttpClt;
     //property DicNewFactory: TDictionary<String, String> write FDicNewFactory;
-    function reqParerToList(const clt: TNetHttpClt; const carBrand: TCarBrand;
+    function reqParerToList(const carBrand: TCarBrand;
       const carSys: TCarSys; var carType: TCarType;
         const checked: boolean; const cb: TGetStrProc): boolean;
     function parerToList(const S: string; const carBrand: TCarBrand;
@@ -144,7 +144,7 @@ begin
   end;
 end;
 
-function TCarParParser.reqParerToList(const clt: TNetHttpClt;
+function TCarParParser.reqParerToList(//const clt: TNetHttpClt;
   const carBrand: TCarBrand; const carSys: TCarSys; var carType: TCarType;
   const checked: boolean; const cb: TGetStrProc): boolean;
 
@@ -179,7 +179,7 @@ function TCarParParser.reqParerToList(const clt: TNetHttpClt;
     url := geUrlOfCarTypeId(carTypeId);
     if not SameText(url, '') then begin
       fname := getFNameOfCarTypeId(carTypeId);
-      S := clt.get(url, fname, false, cb);
+      S := getGBK(url, fname, false, cb);
       str := preProcessA(S);
       self.parerToList(str, carBrand, carSys, carType, checked);
     end;

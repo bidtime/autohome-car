@@ -4,9 +4,7 @@ uses
   Vcl.Forms,
   uStrUtils in 'src\utils\uStrUtils.pas',
   uCharSplit in 'src\utils\uCharSplit.pas',
-  uPaserUtils in 'src\utils\uPaserUtils.pas',
   uCommEvents in 'src\car\uCommEvents.pas',
-  HtmlParser_XE3UP in 'src\utils\HtmlParser_XE3UP.pas',
   uCarBase in 'src\car\uCarBase.pas',
   uCarData in 'src\car\uCarData.pas',
   uCarBrand in 'src\uCarBrand.pas',
@@ -24,7 +22,8 @@ uses
   uCarParParser in 'src\car\uCarParParser.pas',
   uCarCfgParser in 'src\car\uCarCfgParser.pas',
   uFrmMain in 'src\uFrmMain.pas' {frmMain},
-  uFrmSetting in 'src\uFrmSetting.pas' {frmSetting};
+  uFrmSetting in 'src\uFrmSetting.pas' {frmSetting},
+  uFileUtils in 'src\utils\uFileUtils.pas';
 
 {$R *.res}
 

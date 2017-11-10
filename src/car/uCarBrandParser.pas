@@ -6,6 +6,7 @@ uses SysUtils, classes, uCarParserBase, uCommEvents;
 
 type
   TCarBrandParser = class(TCarParserBase)
+  private
   protected
     procedure parerToListOld(const S: string; brandProc: TGetBrandProc);
     procedure parerToListNew(const S: string; brandProc: TGetBrandProc);
@@ -161,6 +162,10 @@ procedure TCarBrandParser.parerToListOld(const S: string; brandProc: TGetBrandPr
       Result := true;
       try
         for I := 0 to strs.Count - 1 do begin
+          if isStop() then begin
+            break;
+          end;
+
           tmp := strs[I];
           if not splitOneBrand(tmp) then begin
             break;

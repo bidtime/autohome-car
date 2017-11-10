@@ -16,7 +16,8 @@ type
     destructor Destroy; override;
     procedure WriteLn_(const S: string);
     procedure WriteLnClose_(const S: string);
-    procedure Rewrite_;
+    procedure Rewrite_; overload;
+    procedure Rewrite_(const bWrite: boolean); overload;
     procedure CloseFile_;
   public
     property WriteFile: boolean read FWriteFile write FWriteFile;
@@ -24,7 +25,7 @@ type
 
 implementation
 
-uses SysUtils, classes;
+uses SysUtils, classes, uFileUtils;
 
 { TCarFile }
 
@@ -57,9 +58,16 @@ begin
   //end;
 end;
 
+procedure TMyTextFile.Rewrite_(const bWrite: boolean);
+begin
+  FWriteFile := bWrite;
+  Rewrite_();
+end;
+
 procedure TMyTextFile.Rewrite_();
 begin
   if FWriteFile then begin
+    TFileUtils.forceDirs(FFileName);
     AssignFile(FFileText, FFileName);
     Rewrite(FFileText);
   end;

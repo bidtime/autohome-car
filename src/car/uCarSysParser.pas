@@ -3,7 +3,7 @@
 interface
 
 uses SysUtils, classes, Generics.Collections, uCarBrand, uCarSys,
-  uCarParserBase, uCommEvents, uNetHttpClt;
+  uCarParserBase, uCommEvents;//, uNetHttpClt;
 
 type
   TCarSysParser = class(TCarParserBase)
@@ -19,9 +19,9 @@ type
     //procedure listBrandToStrs(strs: TStrings);
     procedure loadFactReplIt(const strs: TStrings);
     procedure loadCarSysRmBrd(const strs: TStrings);
-    //
+    // const clt: TNetHttpClt;
     //property DicNewFactory: TDictionary<String, String> write FDicNewFactory;
-    function reqParerToList(const clt: TNetHttpClt; const carBrand: TCarBrand;
+    function reqParerToList(const carBrand: TCarBrand;
       const bNew: boolean; const cb: TGetStrProc): string;
     procedure parerToList(const S: string; const carBrand: TCarBrand;
       const sysProc: TGetBrandSysProc; const bNew: boolean);
@@ -293,7 +293,9 @@ begin
   end;
 end;
 
-function TCarSysParser.reqParerToList(const clt: TNetHttpClt; const carBrand: TCarBrand;
+//const clt: TNetHttpClt;
+
+function TCarSysParser.reqParerToList(const carBrand: TCarBrand;
   const bNew: boolean; const cb: TGetStrProc): string;
 var url, fname, S: string;
   brandIdRaw, brandName, brandSpell: string;
@@ -310,11 +312,11 @@ begin
   end else begin
     fname := getSubDataDir(brandName + '\' + 'carsys' + '.txt');
     //http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=33
-    //https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=33
+    //      https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=33
     url := 'https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=%s';
     url := format(url, [brandIdRaw]);
   end;
-  S := clt.get(url, fname, false, cb);
+  S := getGBK(url, fname, false, cb);
   Result := S;
   // to parse car-system
   //FCarSysPaser.parerToList(S, carBrand, doReqCarType, isDoNew());

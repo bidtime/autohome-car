@@ -13,9 +13,10 @@ type
     destructor Destroy; override;
     //
     //property DicNewFactory: TDictionary<String, String> write FDicNewFactory;
-    function reqParerToList(const clt: TNetHttpClt; const carBrand: TCarBrand;
-      const carSys: TCarSys; var carType: TCarType;
-        const checked: boolean; const cb: TGetStrProc): boolean;
+    function reqParerToList(//const clt: TNetHttpClt;
+      const carBrand: TCarBrand;
+        const carSys: TCarSys; var carType: TCarType;
+          const checked: boolean; const cb: TGetStrProc): boolean;
     function parerToList(const S: string; const carBrand: TCarBrand;
       const carSys: TCarSys; var carType: TCarType;
         const checked: boolean): boolean;
@@ -106,16 +107,18 @@ begin
   end;
 end;
 
-function TCarCfgParser.reqParerToList(const clt: TNetHttpClt;
+function TCarCfgParser.reqParerToList(//const clt: TNetHttpClt;
   const carBrand: TCarBrand; const carSys: TCarSys; var carType: TCarType;
   const checked: boolean; const cb: TGetStrProc): boolean;
 
-  procedure processCfg(const carTypeId: string; const checked: boolean; var carType: TCarType);
+  procedure processCfg(const carRawId: string; const checked: boolean; var carType: TCarType);
 
-    function getFNameOfCarTypeId(const carTypeId: string): string;
+    function getFNameOfCarTypeId(const carRawId: string): string;
+    var S: string;
     begin
-      result := getSubDataDir(carSys.car_brand_name + '\' + carSys.car_serie_name + '\carconfig_'
-        + carTypeId + '_' + 'config' + '.json');
+      S := getSubDataDir(carSys.car_brand_name + '\' + carSys.car_serie_name + '\carconfig_'
+        + carRawId + '_' + 'config' + '.json');
+      Result := S;
     end;
 
     function preProcessA(const str: string): string;
@@ -137,10 +140,14 @@ function TCarCfgParser.reqParerToList(const clt: TNetHttpClt;
 
   var url, fname, S, str: string;
   begin
-    url := geUrlOfCarTypeId(carTypeId);
+    if SameText(carRawId, '16571') then begin
+      str := carRawId;
+    end;
+
+    url := geUrlOfCarTypeId(carRawId);
     if not SameText(url, '') then begin
-      fname := getFNameOfCarTypeId(carTypeId);
-      S := clt.get(url, fname, false, cb);
+      fname := getFNameOfCarTypeId(carRawId);
+      S := getGBK(url, fname, false, cb);
       str := preProcessA(S);
       //
       self.parerToList(str, carBrand, carSys, carType, checked);

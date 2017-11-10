@@ -6,15 +6,6 @@ uses classes, Windows, SysUtils, System.Net.HttpClientComponent;
 
 type
   TNetHttpClt = class
-
-  private
-    class procedure forceDirs(const fName: string); static;
-
-    class function WriteToFile(const s, fname: string;
-      const encode: TEncoding): boolean;
-    class function readFromFile(const fname: string;
-      const encode: TEncoding): string; static;
-
   public
     class function get(netHttp: TNetHttpClient; const url: String;
       encode: TEncoding; const cb: TGetStrProc=nil): String; overload; static;
@@ -87,13 +78,15 @@ type
     constructor Create(); overload;
     constructor Create(encode: TEncoding); overload;
     //constructor Create(NetHttpClient: TNetHttpClient); overload;
-    //constructor Create(NetHttpClient: TNetHttpClient; encode: TEncoding); overload;
+    constructor Create(NetHttpClient: TNetHttpClient; encode: TEncoding); overload;
     destructor Destroy; override;
   end;
 
+var g_NetHttpClt: TNetHttpClt;
+
 implementation
 
-uses StrUtils, Forms;
+uses StrUtils, uFileUtils;
 
 constructor TNetHttpClt.Create();
 begin
@@ -110,46 +103,27 @@ end;
 {constructor TNetHttpClt.Create(NetHttpClient: TNetHttpClient);
 begin
   self.Create(NetHttpClient, TEncoding.UTF8);
-end;
+end;}
 
 constructor TNetHttpClt.Create(NetHttpClient: TNetHttpClient; encode: TEncoding);
 begin
   FSelfHttp := false;
-  self.FNetHttpClient := NetHttpClient;
+  FNetHttpClient := NetHttpClient;
   FEncode := encode;
-end;}
+end;
 
 destructor TNetHttpClt.Destroy;
 begin
-  if Assigned(FNetHttpClient) then begin
+  if FSelfHttp and (Assigned(FNetHttpClient)) then begin
     FNetHttpClient.Free;
   end;
 end;
 
 class function TNetHttpClt.get(netHttp: TNetHttpClient; const url, fname: String;
   encode: TEncoding; const cb: TGetStrProc): String;
-var ss: TStringStream;
 begin
-  ss := TStringStream.Create('', encode);
-  try
-    if Assigned(cb) then begin
-      cb('get' + #9 + url);
-    end;
-    try
-      netHttp.Get(url, ss);
-      Result := ss.DataString;
-      //
-      TNetHttpClt.forceDirs(fname);
-      //ss.SaveToFile(fname);
-      WriteToFile(Result, fname, TEncoding.UTF8);
-    except
-      on e: Exception do begin
-        Result := '';
-      end;
-    end;
-  finally
-    ss.Free;
-  end;
+  Result := get(netHttp, url, encode, cb);
+  TFileUtils.WriteToFile(Result, fname, TEncoding.UTF8);
 end;
 
 class function TNetHttpClt.get(netHttp: TNetHttpClient; const url: string;
@@ -162,7 +136,7 @@ begin
     if assigned(cb) then begin
       cb('loc' + #9 + fname);
     end;
-    Result := readFromFile(fname, TEncoding.UTF8);
+    Result := TFileUtils.readFromFile(fname, TEncoding.UTF8);
   end;
   Sleep(0);
   Sleep(0);
@@ -188,6 +162,7 @@ begin
     ms.Free;
   end;
 end;}
+  //function get(httpClt: TNetHttpClient): string;
 var ss: TStringStream;
 begin
   ss := TStringStream.Create('', encode);
@@ -200,20 +175,11 @@ begin
       Result := ss.DataString;
     except
       on e: Exception do begin
-        Result := '';
+        raise e;
       end;
     end;
   finally
     ss.Free;
-  end;
-end;
-
-class procedure TNetHttpClt.forceDirs(const fName: string);
-var path: string;
-begin
-  path := ExtractFilePath(fName);
-  if not (Directoryexists(path)) then begin
-    ForceDirectories(path);
   end;
 end;
 
@@ -224,8 +190,17 @@ var ss: TStringStream;
 begin
   ss := TStringStream.Create('', encode);
   try
-    netHttp.post(url, strs, ss);
-    Result := ss.DataString;
+    if Assigned(cb) then begin
+      cb('post' + #9 + url);
+    end;
+    try
+      netHttp.post(url, strs, ss);
+      Result := ss.DataString;
+    except
+      on e: Exception do begin
+        raise e;
+      end;
+    end;
   finally
     ss.Free;
   end;
@@ -241,7 +216,7 @@ begin
     if assigned(cb) then begin
       cb('loc' + #9 + fname);
     end;
-    Result := readFromFile(fname, TEncoding.UTF8);
+    Result := TFileUtils.readFromFile(fname, TEncoding.UTF8);
   end;
   Sleep(0);
   Sleep(0);
@@ -249,89 +224,14 @@ end;
 
 class function TNetHttpClt.post(netHttp: TNetHttpClient; const url, fname: String;
   const strs: TStrings; const encode: TEncoding;
-  const cb: TGetStrProc): String;
-
-var ss: TStringStream;
+    const cb: TGetStrProc): String;
 begin
-  ss := TStringStream.Create('', encode);
-  try
-    if Assigned(cb) then begin
-      cb('post' + #9 + url);
-    end;
-    try
-      netHttp.post(url, strs, ss);
-      Result := ss.DataString;
-      //
-      TNetHttpClt.forceDirs(fname);
-      //ss.SaveToFile(fname);
-      WriteToFile(Result, fname, TEncoding.UTF8);
-    except
-      on e: Exception do begin
-        Result := '';
-      end;
-    end;
-  finally
-    ss.Free;
-  end;
+  Result := post(netHttp, url, strs, encode, cb);
+  //
+  TFileUtils.WriteToFile(Result, fname, TEncoding.UTF8);
 end;
 
-{
-  function readIt(const fname: string; const encode: TEncoding): string;
-  var stream: TStringStream;
-  begin
-    stream := TStringStream.Create('', encode);
-    try
-      stream.LoadFromFile( fname );
-      Result := stream.DataString;
-    finally
-      stream.Free;
-    end;
-  end;
-}
-
-class function TNetHttpClt.readFromFile(const fname: string; const encode: TEncoding): string;
-var
-  strs: TStrings;
-begin
-  strs := TStringList.Create;
-  try
-    if FileExists(fname) then begin
-      {if encode=nil then begin
-        strs.LoadFromFile( fname, TEncoding.Default);
-      end else begin}
-        strs.LoadFromFile( fname, encode );
-      //end;
-      Result := strs.Text;
-    end else begin
-      Result := '';
-    end;
-  finally
-    strs.Free;
-  end;
-  Sleep(0);
-  Sleep(0);
-end;
-
-class function TNetHttpClt.WriteToFile(const s, fname: string; const encode: TEncoding): boolean;
-var
-  strs: TStrings;
-begin
-  strs := TStringList.Create();
-  try
-    strs.Text := s;
-    strs.SaveToFile( fname, encode );
-    Result := true;
-  finally
-    strs.Free;
-  end;
-end;
-
-{class function TNetHttpClt.getAppFileName(const S: string): string;
-begin
-  Result := ExtractFilePath(Application.exeName) + S;
-end;
-
-class function TNetHttpClt.strsToMerge(strs: TStrings; const c: char): string;
+{class function TNetHttpClt.strsToMerge(strs: TStrings; const c: char): string;
 var i: integer;
 begin
   Result := '';
@@ -421,5 +321,11 @@ function TNetHttpClt.post(const url: String; const strs: TStrings;
 begin
   Result := post(FNetHttpClient, url, strs, FEncode, cb);
 end;
+
+initialization
+  g_NetHttpClt := TNetHttpClt.Create(nil);
+
+finalization
+  g_NetHttpClt.Free;
 
 end.

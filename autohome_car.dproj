@@ -89,9 +89,7 @@
         </DelphiCompile>
         <DCCReference Include="src\utils\uStrUtils.pas"/>
         <DCCReference Include="src\utils\uCharSplit.pas"/>
-        <DCCReference Include="src\utils\uPaserUtils.pas"/>
         <DCCReference Include="src\car\uCommEvents.pas"/>
-        <DCCReference Include="src\utils\HtmlParser_XE3UP.pas"/>
         <DCCReference Include="src\car\uCarBase.pas"/>
         <DCCReference Include="src\car\uCarData.pas"/>
         <DCCReference Include="src\uCarBrand.pas"/>
@@ -114,6 +112,7 @@
         <DCCReference Include="src\uFrmSetting.pas">
             <Form>frmSetting</Form>
         </DCCReference>
+        <DCCReference Include="src\utils\uFileUtils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
