@@ -45,7 +45,7 @@ object frmMain: TfrmMain
     Width = 1028
     Height = 22
     ButtonHeight = 21
-    ButtonWidth = 72
+    ButtonWidth = 53
     Caption = 'ToolBar1'
     ShowCaptions = True
     TabOrder = 0
@@ -60,57 +60,33 @@ object frmMain: TfrmMain
     object cbxURL: TComboBox
       Left = 8
       Top = 0
-      Width = 169
+      Width = 460
       Height = 21
+      ItemIndex = 0
       TabOrder = 2
-      Text = 
-        'http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?needDa' +
-        'ta=1'
+      Text = 'https://www.che168.com/Handler/ScriptCarList_V1.ashx?needData=1'
       Items.Strings = (
+        'https://www.che168.com/Handler/ScriptCarList_V1.ashx?needData=1'
         
-          'http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?needDa' +
-          'ta=1'
-        
-          'http://www.che168.com/handler/usedcarlistv5.ashx?v=201411191823&' +
-          'action=brandlist')
+          'http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlis' +
+          't')
     end
     object ToolButton2: TToolButton
-      Left = 177
+      Left = 468
       Top = 0
       Caption = 'go'
       ImageIndex = 1
       OnClick = nGotoClick
     end
-    object ToolButton5: TToolButton
-      Left = 249
+    object ToolButton1: TToolButton
+      Left = 521
       Top = 0
       Caption = 'do_brand'
-      ImageIndex = 3
-      OnClick = nBrandClick
-    end
-    object ToolButton1: TToolButton
-      Left = 321
-      Top = 0
-      Caption = 'do_carsys'
       ImageIndex = 6
       OnClick = ToolButton1Click
     end
-    object ToolButton3: TToolButton
-      Left = 393
-      Top = 0
-      Caption = 'do_cartype'
-      ImageIndex = 6
-      OnClick = ToolButton3Click
-    end
-    object ToolButton7: TToolButton
-      Left = 465
-      Top = 0
-      Caption = 'do_car_detail'
-      ImageIndex = 6
-      OnClick = ToolButton7Click
-    end
     object ToolButton8: TToolButton
-      Left = 537
+      Left = 574
       Top = 0
       Width = 8
       Caption = 'ToolButton8'
@@ -118,7 +94,7 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object cbxStop: TCheckBox
-      Left = 545
+      Left = 582
       Top = 0
       Width = 44
       Height = 21
@@ -126,7 +102,7 @@ object frmMain: TfrmMain
       TabOrder = 0
     end
     object ToolButton12: TToolButton
-      Left = 589
+      Left = 626
       Top = 0
       Width = 8
       Caption = '12'
@@ -134,7 +110,7 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object cbxCarType: TCheckBox
-      Left = 597
+      Left = 634
       Top = 0
       Width = 42
       Height = 21
@@ -144,7 +120,7 @@ object frmMain: TfrmMain
       TabOrder = 3
     end
     object cbxPar: TCheckBox
-      Left = 639
+      Left = 676
       Top = 0
       Width = 42
       Height = 21
@@ -154,7 +130,7 @@ object frmMain: TfrmMain
       TabOrder = 1
     end
     object cbxCfg: TCheckBox
-      Left = 681
+      Left = 718
       Top = 0
       Width = 41
       Height = 21
@@ -164,7 +140,7 @@ object frmMain: TfrmMain
       TabOrder = 5
     end
     object cbxTestCar: TCheckBox
-      Left = 722
+      Left = 759
       Top = 0
       Width = 42
       Height = 21
@@ -172,7 +148,7 @@ object frmMain: TfrmMain
       TabOrder = 4
     end
     object ToolButton4: TToolButton
-      Left = 764
+      Left = 801
       Top = 0
       Width = 8
       Caption = 'ToolButton4'
@@ -180,14 +156,14 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object Label1: TLabel
-      Left = 772
+      Left = 809
       Top = 0
       Width = 36
       Height = 21
       Caption = 'timeout'
     end
     object spedTimeout: TSpinEdit
-      Left = 808
+      Left = 845
       Top = 0
       Width = 51
       Height = 22
@@ -453,14 +429,13 @@ object frmMain: TfrmMain
     Left = 86
     Top = 41
     object N1: TMenuItem
-      Caption = #25991#20214'(F)'
+      Caption = #25991#20214'(&F)'
       object nGoto: TMenuItem
         Caption = 'goto'
         OnClick = nGotoClick
       end
       object nBrand: TMenuItem
         Caption = 'brand'
-        OnClick = nBrandClick
       end
       object setting1: TMenuItem
         Caption = 'setting'
@@ -471,11 +446,9 @@ object frmMain: TfrmMain
       end
       object carTypeSql1: TMenuItem
         Caption = 'carInsSql'
-        OnClick = carTypeSql1Click
       end
       object carUpdateSql1: TMenuItem
         Caption = 'carUpdateSql'
-        OnClick = carUpdateSql1Click
       end
       object cfgSql1: TMenuItem
         Caption = 'cfgSql'
@@ -488,27 +461,10 @@ object frmMain: TfrmMain
       end
     end
     object H1: TMenuItem
-      Caption = #24110#21161'(H)'
+      Caption = #24110#21161'(&H)'
       object A1: TMenuItem
         Caption = #20851#20110'(A)'
       end
     end
-  end
-  object IdHTTP1: TIdHTTP
-    AllowCookies = True
-    ProxyParams.BasicAuthentication = False
-    ProxyParams.ProxyPort = 0
-    Request.ContentLength = -1
-    Request.ContentRangeEnd = -1
-    Request.ContentRangeStart = -1
-    Request.ContentRangeInstanceLength = -1
-    Request.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-    Request.BasicAuthentication = False
-    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
-    Request.Ranges.Units = 'bytes'
-    Request.Ranges = <>
-    HTTPOptions = [hoForceEncodeParams]
-    Left = 88
-    Top = 168
   end
 end

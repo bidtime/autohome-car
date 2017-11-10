@@ -37,6 +37,7 @@ implementation
 procedure TfrmSetting.Button1Click(Sender: TObject);
 begin
   self.Memo1.Lines.SaveToFile(FBName, TEncoding.UTF8);
+  ModalResult := mrOK;
 end;
 
 function TfrmSetting.hit(const brandName: string): boolean;

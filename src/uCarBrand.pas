@@ -2,137 +2,121 @@ unit uCarBrand;
 
 interface
 
-
+uses uCarData;
 
 type
-  TCarBrand=class(TObject)
-  private
-    class var FMaxId: Int64;
-  private
-    raw_id: string;
-    description: string;
-    state: string;
-    sort_no: string;
-    create_time: string;
-    modify_time: string;
-    creator_id: string;
-    modifier_id: string;
+  TCarBrand = class(TCarData)
   public
     letter: string;
     short_code: string;
     logo_url: string;
     blood_enum: string;
+    description: string;
     car_brand_id: string;
     car_brand_code: string;
     car_brand_name: string;
     //carBrandSpell: string;
-  private
   public
     class constructor Create;
     constructor Create;
     destructor Destroy; override;
-    class function getColumn(): string;
-    class function getMaxId(): Int64;
-    function getRow(): string;
-    procedure setRow(const S: string);
-    procedure setRawId(const n: string);
-
-    function getRawId(): string;
-    function getSpell(): string;
+    //procedure setRow(const S: string);
+    //
+    procedure setRawId(const n: string); override;
+    class function getColumn(const c: char=#9): string; override;
+    function getRow(const c: char=#9; const quoted: boolean=false): string; override;
+  public
+    property ShortCode: string read short_code write short_code;
   end;
 
 implementation
 
 uses SysUtils, classes;
 
-{ TCarType }
+{ TCarBrand }
 
 class constructor TCarBrand.Create;
 begin
-  //Result := 67541628411224064;
-  //Result := 67541628411220000;
   FMaxId := 67541628411220000;
+  FTableName := 'ap_car_brand';
 end;
 
 constructor TCarBrand.Create;
 begin
-  state:='1';
-  sort_no:='0';
+  inherited Create;
   blood_enum := '0';
-  create_time:=FormatDateTime('yyyy-mm-dd hh:nn:ss', now);
-  modify_time:=create_time;
-  creator_id:='0';
-  modifier_id:='0';
 end;
 
 destructor TCarBrand.Destroy;
 begin
-
-end;
-
-class function TCarBrand.getColumn: string;
-begin
-  Result :=
-    'car_brand_id' + #9 +
-    'car_brand_code' + #9 +
-    'car_brand_name' + #9 +
-    'description' + #9 +
-    'state' + #9 +
-    'sort_no' + #9 +
-    'create_time' + #9 +
-    'modify_time' + #9 +
-    'creator_id' + #9 +
-    'modifier_id' + #9 +
-    'letter' + #9 +
-    'short_code' + #9 +
-    'logo_url' + #9 +
-    'blood_enum' + #9 +
-    'raw_id';
-end;
-
-class function TCarBrand.getMaxId: Int64;
-begin
- //Dec(FMaxId);
- Result := FMaxId;
-end;
-
-function TCarBrand.getRawId: string;
-begin
-  Result := raw_id;
-end;
-
-function TCarBrand.getRow: string;
-begin
-  Result :=
-    car_brand_id + #9 +
-    car_brand_code + #9 +
-    car_brand_name + #9 +
-    description + #9 +
-    state + #9 +
-    sort_no + #9 +
-    create_time + #9 +
-    modify_time + #9 +
-    creator_id + #9 +
-    modifier_id + #9 +
-    letter + #9 +
-    short_code + #9 +
-    logo_url + #9 +
-    blood_enum + #9 +
-    raw_id;
-end;
-
-function TCarBrand.getSpell: string;
-begin
-  Result := self.short_code;
 end;
 
 procedure TCarBrand.setRawId(const n: string);
 begin
   raw_id := n;
-  car_brand_id := IntToStr(getMaxId() + StrToInt(n));
+  car_brand_id := IntToStr(FMaxId + StrToInt(n));
 end;
 
-procedure TCarBrand.setRow(const S: string);
+class function TCarBrand.getColumn(const c: char): string;
+begin
+  Result :=
+    'car_brand_id' + c +
+    'car_brand_code' + c +
+    'car_brand_name' + c +
+    'description' + c +
+    'state' + c +
+    'sort_no' + c +
+    'create_time' + c +
+    'modify_time' + c +
+    'creator_id' + c +
+    'modifier_id' + c +
+    'letter' + c +
+    'short_code' + c +
+    'logo_url' + c +
+    'blood_enum' + c +
+    'raw_id';
+end;
+
+function TCarBrand.getRow(const c: char; const quoted: boolean): string;
+begin
+  if quoted then begin
+    Result :=
+      car_brand_id + c +
+      QuotedStr(car_brand_code) + c +
+      QuotedStr(car_brand_name) + c +
+      QuotedStr(description) + c +
+      state + c +
+      sort_no + c +
+      QuotedStr(create_time) + c +
+      QuotedStr(modify_time) + c +
+      creator_id + c +
+      modifier_id + c +
+      QuotedStr(letter) + c +
+      QuotedStr(short_code) + c +
+      QuotedStr(logo_url) + c +
+      blood_enum + c +
+      raw_id;
+  end else begin
+    Result :=
+      car_brand_id + c +
+      car_brand_code + c +
+      car_brand_name + c +
+      description + c +
+      state + c +
+      sort_no + c +
+      create_time + c +
+      modify_time + c +
+      creator_id + c +
+      modifier_id + c +
+      letter + c +
+      short_code + c +
+      logo_url + c +
+      blood_enum + c +
+      raw_id;
+  end;
+end;
+
+{procedure TCarBrand.setRow(const S: string);
   procedure strsToItems(strs: TStrings);
   var i: integer;
     str: string;
@@ -170,8 +154,7 @@ begin
   finally
     if Assigned(strs) then strs.Free;
   end;
-end;
-
+end;}
 
 end.
 

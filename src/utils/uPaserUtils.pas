@@ -75,12 +75,8 @@ type
     //
     class procedure SimpleCSSSel2(const node: IHtmlElement; const cssSel, code,
       dtlCode: string; const doIt: TElementCodeEvent); static;
-  public
+  {public
     class function readText(const fname: string; const encode: TEncoding=nil): string;
-
-//    class function get(idHttp1: TIdHttp; const url: String;
-//      const callbak: TGetStrProc2=nil): String; overload; static;
-
     class function get(idHttp1: TIdHttp; const url: String;
       encode: TEncoding; const callbak: TGetStrProc2=nil): String; overload; static;
 
@@ -106,14 +102,14 @@ type
     class function post(idHttp1: TIdHttp; const url: String;
       const strs: TStrings; const callbak: TGetStrProc2=nil): String; overload; static;
     class function streamToString(const Stream: TStream; encode: TEncoding): string;
-
+    }
   public
 
     class procedure AppendLog(const fileName, context: string; const addTime: boolean=true); static;
     class procedure AppendText(const fileName, context: string); static;
 
-    class function strsToParams(strs: TStrings): string; static;
-    class function strsToMerge(strs: TStrings; const c: char): string; static;
+    //class function strsToParams(strs: TStrings): string; static;
+    //class function strsToMerge(strs: TStrings; const c: char): string; static;
 
   public
     class procedure parseProductTemplate(const S: string; strs: TStrings); static;
@@ -548,13 +544,18 @@ begin
   eleToStrRaw(e, false);
 end;
 
+class function TPaserUtils.getAppFileName(const S: string): string;
+begin
+  Result := ExtractFilePath(Application.exeName) + S;
+end;
+
 {class function TPaserUtils.get(idHttp1: TIdHttp; const url: String;
   const callbak: TGetStrProc2): String;
 begin
   Result := get(idHttp1, url, TEncoding.Default, callbak);
 end;}
 
-class function TPaserUtils.streamToString(const Stream: TStream; encode: TEncoding): string;
+{class function TPaserUtils.streamToString(const Stream: TStream; encode: TEncoding): string;
 var
   Size: Integer;
   Buffer: TBytes;
@@ -606,24 +607,6 @@ begin
   end;
 end;
 
-class function TPaserUtils.get(idHttp1: TIdHttp; const url: String;
-  encode: TEncoding; const callbak: TGetStrProc2): String;
-{begin
-  Result := IdHTTP1.Get(url);
-end;}
-{var ms: TMemoryStream;
-begin
-  ms := TMemoryStream.Create();
-  try
-    if Assigned(callbak) then begin
-      callbak('get', url);
-    end;
-    IdHTTP1.Get(url, ms);
-    Result := streamToString(ms, encode);
-  finally
-    ms.Free;
-  end;
-end;}
 var ss: TStringStream;
 begin
   ss := TStringStream.Create('', encode);
@@ -682,11 +665,6 @@ begin
   Sleep(0);
 end;
 
-class function TPaserUtils.getAppFileName(const S: string): string;
-begin
-  Result := ExtractFilePath(Application.exeName) + S;
-end;
-
 class function TPaserUtils.strsToMerge(strs: TStrings; const c: char): string;
 var i: integer;
 begin
@@ -737,7 +715,7 @@ class function TPaserUtils.getCtxOfUrlDef(idHttp1: TIdHttp;
 begin
   Result := getCtxOfUrl(idHttp1, url, fname, TEncoding.Default,
     force, callbak);
-end;
+end;}
 
 class procedure TPaserUtils.getInsertSqlOfStrs(const strs: TStrings; const tName: string;
     strsRst: TStrings; const blEvent:TBoolOfStrProc);
@@ -804,7 +782,7 @@ begin
   strsRst.Add('commit;');
 end;
 
-class function TPaserUtils.getCtxOfUrl(idHttp1: TIdHttp; const url: string;
+{class function TPaserUtils.getCtxOfUrl(idHttp1: TIdHttp; const url: string;
   const fname: string; const encode: TEncoding; const force: boolean;
     const callbak: TGetStrProc2): string;
   function readIt(const fname: string; const encode: TEncoding): string;
@@ -853,7 +831,7 @@ begin
   end;
   Sleep(0);
   Sleep(0);
-end;
+end;}
 
 class procedure TPaserUtils.parseProductTemplate(const S: string; strs: TStrings);
 

@@ -3,7 +3,7 @@ object frmSetting: TfrmSetting
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
-  Caption = 'frmSetting'
+  Caption = #35774#32622
   ClientHeight = 342
   ClientWidth = 482
   Color = clBtnFace
@@ -21,7 +21,7 @@ object frmSetting: TfrmSetting
     Top = 11
     Width = 433
     Height = 270
-    Caption = 'setting'
+    Caption = #35831#36755#20837#21697#29260
     TabOrder = 0
     object Memo1: TMemo
       Left = 24

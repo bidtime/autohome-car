@@ -2,22 +2,10 @@ unit uCarSys;
 
 interface
 
+uses uCarData;
+
 type
-  TCarSys=class(TObject)
-  private
-    raw_id: string;
-    //cover_url: string;
-    //description: string;
-    //remark: string;
-    state: string;
-    sort_no: string;
-    create_time: string;
-    modify_time: string;
-    creator_id: string;
-    modifier_id: string;
-  private
-    class var FMaxId: Int64;
-    class function getMaxId: Int64; static;
+  TCarSys = class(TCarData)
   public
     car_serie_id: string;
     car_brand_id: string;
@@ -35,103 +23,108 @@ type
     class constructor Create;
     constructor Create;
     destructor Destroy; override;
-    class function getColumn(): string;
-    procedure setRawId(const S: string);
-    function getRow(): string;
-    function getRawId: string;
+    //
+    procedure setRawId(const S: string); override;
+    class function getColumn(const c: char=#9): string; override;
+    function getRow(const c: char=#9; const quoted: boolean=false): string; override;
   end;
 
 implementation
 
 uses SysUtils;
 
-{ TCarType }
+{ TCarSys }
+
+class constructor TCarSys.Create;
+begin
+  FMaxId := 67621203212410000;
+  FTableName := 'ap_car_serie';
+end;
 
 constructor TCarSys.Create;
 begin
-  state:='1';
-  sort_no:='0';
-  create_time:=FormatDateTime('yyyy-mm-dd hh:nn:ss', now);
-  modify_time:=create_time;
-  creator_id:='0';
-  modifier_id:='0';
+  inherited create;
   //
   car_oem_id := '0';
   nat_enum := '0';
 end;
 
-class constructor TCarSys.Create;
-begin
-  //FMaxId := 67541628432410000;
-  FMaxId := 67621203212410000;
-end;
-
 destructor TCarSys.Destroy;
 begin
-
 end;
 
-class function TCarSys.getMaxId: Int64;
-begin
- //Dec(FMaxId);
- Result := FMaxId;
-end;
-
-function TCarSys.getRawId: string;
-begin
-  Result := raw_id;
-end;
-
-class function TCarSys.getColumn: string;
+class function TCarSys.getColumn(const c: char): string;
 begin
   Result :=
-    'car_serie_id' + #9 +
-    'car_brand_id' + #9 +
-    'car_brand_name' + #9 +
-    'car_oem_id' + #9 +
-    'car_oem_name' + #9 +
-    'car_serie_code' + #9 +
-    'car_serie_name' + #9 +
-    'short_code' + #9 +
-    'nat_enum' + #9 +
-    //'description' + #9 +
-    //'remark' + #9 +
-    'state' + #9 +
-    'sort_no' + #9 +
-    'create_time' + #9 +
-    'modify_time' + #9 +
-    'creator_id' + #9 +
-    'modifier_id' + #9 +
+    'car_serie_id' + c +
+    'car_brand_id' + c +
+    'car_brand_name' + c +
+    'car_oem_id' + c +
+    'car_oem_name' + c +
+    'car_serie_code' + c +
+    'car_serie_name' + c +
+    'short_code' + c +
+    'nat_enum' + c +
+    //'description' + c +
+    //'remark' + c +
+    'state' + c +
+    'sort_no' + c +
+    'create_time' + c +
+    'modify_time' + c +
+    'creator_id' + c +
+    'modifier_id' + c +
     'raw_id';
 end;
 
-function TCarSys.getRow: string;
+function TCarSys.getRow(const c: char; const quoted: boolean): string;
 begin
-  Result :=
-    car_serie_id + #9 +
-    car_brand_id + #9 +
-    car_brand_name + #9 +
-    car_oem_id + #9 +
-    car_oem_name + #9 +
-    car_serie_code + #9 +
-    car_serie_name + #9 +
-    short_code + #9 +
-    nat_enum + #9 +
-    //description + #9 +
-    //remark + #9 +
-    state + #9 +
-    sort_no + #9 +
-    create_time + #9 +
-    modify_time + #9 +
-    creator_id + #9 +
-    modifier_id + #9 +
-    raw_id;
+  if quoted then begin
+    Result :=
+      car_serie_id + c +
+      car_brand_id + c +
+      QuotedStr(car_brand_name) + c +
+      car_oem_id + c +
+      QuotedStr(car_oem_name) + c +
+      QuotedStr(car_serie_code) + c +
+      QuotedStr(car_serie_name) + c +
+      QuotedStr(short_code) + c +
+      //nat_enum + c +
+      //'description' + c +
+      //'remark' + c +
+      state + c +
+      (sort_no) + c +
+      QuotedStr(create_time) + c +
+      QuotedStr(modify_time) + c +
+      (creator_id) + c +
+      (modifier_id) + c +
+      (raw_id);
+  end else begin
+    Result :=
+      car_serie_id + c +
+      car_brand_id + c +
+      car_brand_name + c +
+      car_oem_id + c +
+      car_oem_name + c +
+      car_serie_code + c +
+      car_serie_name + c +
+      short_code + c +
+      nat_enum + c +
+      //description + c +
+      //remark + c +
+      state + c +
+      sort_no + c +
+      create_time + c +
+      modify_time + c +
+      creator_id + c +
+      modifier_id + c +
+      raw_id;
+  end;
 end;
 
 procedure TCarSys.setRawId(const S: string);
 begin
   raw_id := s;
-  self.car_serie_id := IntToStr(getMaxId() + StrToInt(s));
+  self.car_serie_id := IntToStr(FMaxId+ StrToInt(s));
 end;
 
 end.
