@@ -137,8 +137,8 @@ begin
       //remark + c +
       state + c +
       sort_no + c +
-      create_time + c +
-      modify_time + c +
+      QuotedStr(create_time) + c +
+      QuotedStr(modify_time) + c +
       creator_id + c +
       modifier_id + c +
       raw_id + c +
