@@ -7,6 +7,7 @@ uses uCarData;
 type
   TCarType=class(TCarData)
   private
+    class var FMaxId: Int64;
   public
     car_type_id: string;
     car_brand_id: string;
@@ -43,16 +44,16 @@ uses SysUtils, variants;
 
 { TCarType }
 
+class constructor TCarType.Create;
+begin
+  FMaxId := 67628185763100000;
+end;
+
 constructor TCarType.Create;
 begin
   inherited create;
   car_oem_id := '0';
-end;
-
-class constructor TCarType.Create;
-begin
   FTableName := 'ap_car_type';
-  FMaxId := 67628185763100000;
 end;
 
 destructor TCarType.Destroy;

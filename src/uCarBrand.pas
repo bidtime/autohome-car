@@ -6,6 +6,8 @@ uses uCarData;
 
 type
   TCarBrand = class(TCarData)
+  private
+    class var FMaxId: Int64;
   public
     letter: string;
     short_code: string;
@@ -38,13 +40,13 @@ uses SysUtils, classes;
 class constructor TCarBrand.Create;
 begin
   FMaxId := 67541628411220000;
-  FTableName := 'ap_car_brand';
 end;
 
 constructor TCarBrand.Create;
 begin
   inherited Create;
   blood_enum := '0';
+  FTableName := 'ap_car_brand';
 end;
 
 destructor TCarBrand.Destroy;

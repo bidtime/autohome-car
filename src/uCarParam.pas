@@ -7,7 +7,11 @@ uses uCarData;
 type
   TCarParam=class(TCarData)
   private
+    class var FMaxId: Int64;
+  private
     car_param_id: string;
+    //
+    class function getIncMaxId(): Int64;
   public
     car_type_id: string;
     //'car_param_type_id' + #9 +
@@ -29,16 +33,22 @@ uses SysUtils, classes;
 
 { TCarParam }
 
+class constructor TCarParam.Create;
+begin
+  FMaxId := 61534231325612512;
+end;
+
 constructor TCarParam.Create;
 begin
   inherited create;
   car_param_id := IntToStr(getIncMaxId());
+  FTableName := 'ap_car_param';
 end;
 
-class constructor TCarParam.Create;
+class function TCarParam.getIncMaxId: Int64;
 begin
-  FTableName := 'ap_car_param';
-  FMaxId := 61534231325612512;
+ Inc(FMaxId);
+ Result := FMaxId;
 end;
 
 destructor TCarParam.Destroy;

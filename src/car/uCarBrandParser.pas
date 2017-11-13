@@ -15,6 +15,8 @@ type
     destructor Destroy; override;
     //
     procedure parerToList(const S: string; brandProc: TGetBrandProc; const bNew: boolean);
+    function reqParerToList(const url: string;
+      const bNew: boolean; const cb: TGetStrProc): string;
     //procedure listBrandToStrs(strs: TStrings);
   end;
 
@@ -79,7 +81,7 @@ procedure TCarBrandParser.parerToListNew(const S: string; brandProc: TGetBrandPr
           carBrand.letter := spell;
           //strs.add(id + #9 + letter + #9 + name + #9 + spell);
         end;
-        FFileText.WriteLn_(carBrand.getRow());
+        FFileText.WriteLn_(carBrand.getSql());
         if Assigned(brandProc) then begin
           Result := brandProc(carBrand);
         end;
@@ -196,6 +198,18 @@ begin
     FFileText.WriteLn_(TCarBrand.commit());
     strs.Free;
   end;
+end;
+
+function TCarBrandParser.reqParerToList(const url: string; const bNew: boolean;
+  const cb: TGetStrProc): string;
+var fname: string;
+begin
+  if bNew then begin
+    fname := getSubDataDir('get-car-brand_' + '.txt');
+  end else begin
+    fname := getSubDataDir('get-car-brand' + '.txt');
+  end;
+  Result := getGBK(url, fname, false, cb);
 end;
 
 end.

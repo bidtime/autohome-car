@@ -2,12 +2,14 @@ unit uMyTextFile;
 
 interface
 
+uses Classes;
+
 type
   TMyTextFile = class(TObject)
   private
     procedure SetFileName(const S: string);
   protected
-    FFileText: Text;
+    FFileText: TTextWriter;
     FFileName: string;
     FWriteFile: boolean;
   public
@@ -15,7 +17,7 @@ type
     //constructor Create(const fileName: string; const writeF: boolean); overload;
     destructor Destroy; override;
     procedure WriteLn_(const S: string);
-    procedure WriteLnClose_(const S: string);
+    //procedure WriteLnClose_(const S: string);
     procedure Rewrite_; overload;
     procedure Rewrite_(const bWrite: boolean); overload;
     procedure CloseFile_;
@@ -25,7 +27,7 @@ type
 
 implementation
 
-uses SysUtils, classes, uFileUtils;
+uses SysUtils, uFileUtils;
 
 { TCarFile }
 
@@ -68,30 +70,34 @@ procedure TMyTextFile.Rewrite_();
 begin
   if FWriteFile then begin
     TFileUtils.forceDirs(FFileName);
-    AssignFile(FFileText, FFileName);
-    Rewrite(FFileText);
+    //AssignFile(FFileText, FFileName);
+    //Rewrite(FFileText);
+    FFileText := TStreamWriter.Create(FFileName, False);
   end;
 end;
 
 procedure TMyTextFile.WriteLn_(const S: string);
 begin
   if FWriteFile then begin
-    WriteLn(FFileText, s);
+    //WriteLn(FFileText, s);
+    FFileText.WriteLine(S);
   end;
 end;
 
-procedure TMyTextFile.WriteLnClose_(const S: string);
+{procedure TMyTextFile.WriteLnClose_(const S: string);
 begin
   if FWriteFile then begin
-    WriteLn(FFileText, s);
-    CloseFile(FFileText);
+    //WriteLn(FFileText, s);
+    //CloseFile(FFileText);
   end;
-end;
+end;}
 
 procedure TMyTextFile.CloseFile_();
 begin
   if FWriteFile then begin
-    CloseFile(FFileText);
+    //CloseFile(FFileText);
+    FFileText.Close;
+    FFileText.Free;
   end;
 end;
 

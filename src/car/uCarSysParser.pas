@@ -17,7 +17,7 @@ type
     constructor Create(const fileName: string);
     destructor Destroy; override;
     //procedure listBrandToStrs(strs: TStrings);
-    procedure loadFactReplIt(const strs: TStrings);
+    procedure loadFactReplIt(const strs: TStrings; const bNew: boolean);
     procedure loadCarSysRmBrd(const strs: TStrings);
     // const clt: TNetHttpClt;
     //property DicNewFactory: TDictionary<String, String> write FDicNewFactory;
@@ -327,7 +327,17 @@ begin
   loadStand(strs, FCarSysRmBrd);
 end;
 
-procedure TCarSysParser.loadFactReplIt(const strs: TStrings);
+procedure TCarSysParser.loadFactReplIt(const strs: TStrings; const bNew: boolean);
+
+  procedure replFactText(strs: TStrings);
+  begin
+    if bNew then begin
+      strs.Text := strs.Text.Replace('其他', '其它');
+    end else begin
+      strs.Text := strs.Text.Replace('其它', '其他');
+    end;
+  end;
+
   function getKV(const S: string; var k, v: string): boolean;
   var strs: TStrings;
     i: integer;
@@ -357,6 +367,7 @@ procedure TCarSysParser.loadFactReplIt(const strs: TStrings);
 var i: integer;
   S, k, v: string;
 begin
+  replFactText(strs);
   FDicNewFactory.Clear;
   for I := 1 to strs.Count - 1 do begin
     S := strs[I];

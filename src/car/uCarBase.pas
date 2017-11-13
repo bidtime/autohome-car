@@ -4,17 +4,13 @@ interface
 
 type
   TCarBase = class(TObject)
-  private
   protected
-    class var FMaxId: Int64;
-    class var FTableName: string;
+    FTableName: string;
   public
     constructor Create;
     destructor Destroy; override;
     class function startTrans(): string;
     class function commit(): string;
-    //
-    class function getIncMaxId(): Int64;
     //procedure setRow(const S: string);
     function getSql: string;
     //
@@ -39,7 +35,7 @@ end;
 class function TCarBase.startTrans: string;
 begin
   Result := 'start transaction;';
-  Result := '-- truncate table ' + FTableName;
+  Result := '-- truncate table ';// + FTableName;
 end;
 
 class function TCarBase.commit: string;
@@ -47,15 +43,9 @@ begin
   Result := 'commit;';
 end;
 
-class function TCarBase.getIncMaxId: Int64;
-begin
- Inc(FMaxId);
- Result := FMaxId;
-end;
-
 function TCarBase.getSql: string;
 begin
-  Result := 'insert ignore into ' + FTableName +
+  Result := 'insert into ' + FTableName +
     '(' +
       getColumn(#44) +
     ')' +

@@ -7,7 +7,11 @@ uses uCarData;
 type
   TCarConfig=class(TCarData)
   private
+    class var FMaxId: Int64;
+  private
     car_cfg_id: string;
+    //
+    class function getIncMaxId(): Int64;
   public
     car_type_id: string;
     //'car_cfg_type_id' + #9 +
@@ -29,16 +33,22 @@ uses SysUtils, classes;
 
 { TCarConfig }
 
+class constructor TCarConfig.Create;
+begin
+  FMaxId := 62131612811213576;
+end;
+
 constructor TCarConfig.Create;
 begin
   inherited create;
   car_cfg_id := IntToStr(getIncMaxId());
+  FTableName := 'ap_car_cfg';
 end;
 
-class constructor TCarConfig.Create;
+class function TCarConfig.getIncMaxId: Int64;
 begin
-  FTableName := 'ap_car_cfg';
-  FMaxId := 62131612811213576;
+ Inc(FMaxId);
+ Result := FMaxId;
 end;
 
 destructor TCarConfig.Destroy;

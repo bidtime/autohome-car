@@ -6,6 +6,8 @@ uses uCarData;
 
 type
   TCarSys = class(TCarData)
+  private
+    class var FMaxId: Int64;
   public
     car_serie_id: string;
     car_brand_id: string;
@@ -38,7 +40,6 @@ uses SysUtils;
 class constructor TCarSys.Create;
 begin
   FMaxId := 67621203212410000;
-  FTableName := 'ap_car_serie';
 end;
 
 constructor TCarSys.Create;
@@ -47,6 +48,7 @@ begin
   //
   car_oem_id := '0';
   nat_enum := '0';
+  FTableName := 'ap_car_serie';
 end;
 
 destructor TCarSys.Destroy;
