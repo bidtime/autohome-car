@@ -163,7 +163,7 @@ end;
 
 procedure TfrmMain.addLogMod(const S: string; const nmod: integer);
 begin
-  memoLog.Lines.Add(s);
+  memoLog.Lines.Add(IntToStr(memoLog.lines.count) + '.' + #9 + s);
   self.setStatus(IntToStr(memoLog.Tag)+'/'+s);
 end;
 
