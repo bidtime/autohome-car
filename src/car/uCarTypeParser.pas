@@ -14,15 +14,13 @@ type
   public
     constructor Create(const fileName: string);
     destructor Destroy; override;
-    //procedure listBrandToStrs(strs: TStrings);
     procedure loadDicVehType(const strs: TStrings);
     procedure loadDicVehTypeId(const strs: TStrings);
     //
     function parerToList(const S: string; const carBrand: TCarBrand;
       const carSys: TCarSys; const cb: TGetBrandSysTypeProc;
         const bNew: boolean): boolean;
-    function preParerToList(//const clt: TNetHttpClt;
-      const carBrand: TCarBrand;
+    function preParerToList(const carBrand: TCarBrand;
         const carSys: TCarSys; const bNew: boolean; const cb: TGetStrProc): string;
   public
     property MapCarTypeRaw: TDictionary<Integer, String> read FMapCarTypeRaw write FMapCarTypeRaw;
@@ -242,7 +240,7 @@ begin
   end;
 end;
 
-function TCarTypeParser.preParerToList(//const clt: TNetHttpClt;
+function TCarTypeParser.preParerToList(
   const carBrand: TCarBrand; const carSys: TCarSys; const bNew: boolean;
   const cb: TGetStrProc): string;
 var url, fname, S, carTypeFileName: string;

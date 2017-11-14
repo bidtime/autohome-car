@@ -11,8 +11,7 @@ type
   public
     constructor Create(const fileName: string);
     destructor Destroy; override;
-    //                                   const clt: TNetHttpClt;
-    //property DicNewFactory: TDictionary<String, String> write FDicNewFactory;
+    //
     function reqParerToList(const carBrand: TCarBrand;
       const carSys: TCarSys; var carType: TCarType;
         const checked: boolean; const cb: TGetStrProc): boolean;

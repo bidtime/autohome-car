@@ -61,7 +61,7 @@ constructor TCarType.Create;
 begin
   inherited create;
   car_oem_id := '0';
-  FTableName := 'ap_car_type';
+  FTableName := 'ap_car_type_new';
 end;
 
 destructor TCarType.Destroy;

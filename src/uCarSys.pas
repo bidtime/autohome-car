@@ -48,7 +48,7 @@ begin
   //
   car_oem_id := '0';
   nat_enum := '0';
-  FTableName := 'ap_car_serie';
+  FTableName := 'ap_car_serie_new';
 end;
 
 destructor TCarSys.Destroy;

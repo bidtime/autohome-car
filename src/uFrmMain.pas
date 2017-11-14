@@ -201,8 +201,8 @@ begin
     carType.car_serie_name + '/' +
     carType.car_type_name + '/' +
     carType.RawId + '/' + carType.year_model;
-  //self.setStatus(str);
-  self.doUrlEvent2(str);
+  self.setStatus(str);
+  //self.doUrlEvent2(str);
   //
   FCarParParser.reqParerToList(carBrand, carSys, carType,
     cbxPar.checked, doUrlEvent);
@@ -274,12 +274,12 @@ begin
   memoBrand.clear;
   memoBrand.Lines.add(TCarBrand.getColumn());
   //
-  FCarBrandPaser.FileText.Rewrite_(true);
-  FCarSysPaser.FileText.Rewrite_(true);
-  FCarTypePaser.FileText.Rewrite_(self.cbxCarType.Checked);
+  FCarBrandPaser.Rewrite_(true, TCarBrand.startTrans);
+  FCarSysPaser.Rewrite_(true, TCarSys.startTrans);
+  FCarTypePaser.Rewrite_(cbxCarType.Checked, TCarType.startTrans);
   //
-  FCarParParser.FileText.Rewrite_(self.cbxPar.Checked);
-  FCarCfgParser.FileText.Rewrite_(self.cbxCfg.Checked);
+  FCarParParser.Rewrite_(cbxPar.Checked, TCarParam.startTrans);
+  FCarCfgParser.Rewrite_(cbxCfg.Checked, TCarConfig.startTrans);
   //
   FCarTypePaser.MapCarTypeRaw.Clear;
   try
@@ -291,12 +291,12 @@ begin
       FCarBrandPaser.parerToList(S, doOneBrand, FUrlNew);
     end;
   finally
-    FCarBrandPaser.FileText.CloseFile_;
-    FCarSysPaser.FileText.CloseFile_;
-    FCarTypePaser.FileText.CloseFile_;
+    FCarBrandPaser.CloseFile_(TCarBrand.commit);
+    FCarSysPaser.CloseFile_(TCarSys.commit);
+    FCarTypePaser.CloseFile_(TCarType.commit);
     //
-    FCarParParser.FileText.CloseFile_;
-    FCarCfgParser.FileText.CloseFile_;
+    FCarParParser.CloseFile_(TCarParam.commit);
+    FCarCfgParser.CloseFile_(TCarConfig.commit);
     //
     self.memoCtx.Lines.Add(IntToStr(memoCtx.lines.count)+ ', ' + 'all brand' + ', finish.');
   end;

@@ -46,7 +46,7 @@ constructor TCarBrand.Create;
 begin
   inherited Create;
   blood_enum := '0';
-  FTableName := 'ap_car_brand';
+  FTableName := 'ap_car_brand_new';
 end;
 
 destructor TCarBrand.Destroy;

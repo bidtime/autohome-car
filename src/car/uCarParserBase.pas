@@ -17,6 +17,9 @@ type
     destructor Destroy; override;
     class procedure loadStand(strs: TStrings; Dic: TDictionary<String, String>;
       const c: char=#9); static;
+    //
+    procedure Rewrite_(const bWrite: boolean; const S: string);
+    procedure CloseFile_(const S: string);
 
     function getSubDataDir(const s: string): string;
     function get(const url, fname: string;
@@ -26,7 +29,7 @@ type
       const force: boolean=false;
         const cb: TGetStrProc=nil): String;
   public
-    property FileText: TMyTextFile read FFileText;
+    //property FileText: TMyTextFile read FFileText;
     property StopFunc: TBooleanFunc write FStopFunc;
     property DataFullPath: string write FDataFullPath;
   end;
@@ -37,6 +40,12 @@ implementation
 uses uCharSplit, System.Net.HttpClientComponent, uNetHttpClt;
 
 { TCarParserBase }
+
+procedure TCarParserBase.CloseFile_(const S: string);
+begin
+  FFileText.writeLn_(S);
+  FFileText.CloseFile_;
+end;
 
 constructor TCarParserBase.Create(const fileName: string);
 begin
@@ -121,6 +130,12 @@ begin
     v := TCharSplit.getSplitIdx(S, c, 1);
     Dic.Add(k, v);
   end;
+end;
+
+procedure TCarParserBase.Rewrite_(const bWrite: boolean; const S: string);
+begin
+  FFileText.Rewrite_(true);
+  FFileText.WriteLn_(S);
 end;
 
 end.

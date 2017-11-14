@@ -50,11 +50,13 @@ end;}
 procedure TCarBrandParser.parerToList(const S: string; brandProc: TGetBrandProc;
   const bNew: boolean);
 begin
+  //FFileText.WriteLn_(TCarBrand.startTrans());
   if bNew then begin
     parerToListNew(S, brandProc);
   end else begin
     parerToListOld(S, brandProc);
   end;
+  //FFileText.WriteLn_(TCarBrand.commit());
 end;
 
 procedure TCarBrandParser.parerToListNew(const S: string; brandProc: TGetBrandProc);
@@ -106,7 +108,6 @@ procedure TCarBrandParser.parerToListNew(const S: string; brandProc: TGetBrandPr
 var
   jsonVal: TJSONValue;
 begin
-  FFileText.WriteLn_(TCarBrand.startTrans());
   if Trim(S) = '' then begin
     exit;
   end;
@@ -190,12 +191,10 @@ procedure TCarBrandParser.parerToListOld(const S: string; brandProc: TGetBrandPr
 var strs: TStrings;
 begin
   strs := TStringList.Create;
-  FFileText.WriteLn_(TCarBrand.startTrans());
   try
     strs.Text := toDoIt(S);
     splitAllBrands(strs);
   finally
-    FFileText.WriteLn_(TCarBrand.commit());
     strs.Free;
   end;
 end;

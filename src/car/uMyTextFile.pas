@@ -12,13 +12,13 @@ type
     FFileText: TTextWriter;
     FFileName: string;
     FWriteFile: boolean;
+    procedure Rewrite_; overload;
   public
     constructor Create(const fileName: string); overload;
     //constructor Create(const fileName: string; const writeF: boolean); overload;
     destructor Destroy; override;
     procedure WriteLn_(const S: string);
     //procedure WriteLnClose_(const S: string);
-    procedure Rewrite_; overload;
     procedure Rewrite_(const bWrite: boolean); overload;
     procedure CloseFile_;
   public

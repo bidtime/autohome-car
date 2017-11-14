@@ -42,7 +42,7 @@ constructor TCarConfig.Create;
 begin
   inherited create;
   car_cfg_id := IntToStr(getIncMaxId());
-  FTableName := 'ap_car_cfg';
+  FTableName := 'ap_car_cfg_new';
 end;
 
 class function TCarConfig.getIncMaxId: Int64;

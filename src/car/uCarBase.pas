@@ -35,7 +35,7 @@ end;
 class function TCarBase.startTrans: string;
 begin
   Result := 'start transaction;';
-  Result := '-- truncate table ';// + FTableName;
+  Result := '-- truncate table ;';// + FTableName;
 end;
 
 class function TCarBase.commit: string;

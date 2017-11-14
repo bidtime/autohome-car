@@ -42,7 +42,7 @@ constructor TCarParam.Create;
 begin
   inherited create;
   car_param_id := IntToStr(getIncMaxId());
-  FTableName := 'ap_car_param';
+  FTableName := 'ap_car_param_new';
 end;
 
 class function TCarParam.getIncMaxId: Int64;
