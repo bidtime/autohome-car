@@ -12,7 +12,7 @@ type
     FDicVehTypeId: TDictionary<String, String>;
     FMapCarTypeRaw: TDictionary<Integer, String>;
   public
-    constructor Create(const fileName: string);
+    constructor Create();
     destructor Destroy; override;
     procedure loadDicVehType(const strs: TStrings);
     procedure loadDicVehTypeId(const strs: TStrings);
@@ -32,9 +32,10 @@ uses System.json, uCharSplit, uMyTextFile, uStrUtils;
 
 { TCarTypeParser }
 
-constructor TCarTypeParser.Create(const fileName: string);
+constructor TCarTypeParser.Create();
 begin
-  inherited create(fileName);
+  inherited create();
+  FFileName := 'car-type-all.txt';
   FDicVehType := TDictionary<String, String>.create();
   FDicVehTypeId:= TDictionary<String, String>.create();
   FMapCarTypeRaw:= TDictionary<Integer, String>.create();
@@ -112,7 +113,7 @@ function TCarTypeParser.parerToList(const S: string; const carBrand: TCarBrand;
             cb(carBrand, carSys, carType);
           end;
           // write to file
-          FFileText.WriteLn_(carType.getSql());
+          FFileText.WriteLine(carType.getSql());
           //FFileText.WriteLn_( carType.updateGearSql() );
           // to cache
           FMapCarTypeRaw.Add(carTypeIdRaw, carName);
@@ -174,7 +175,7 @@ function TCarTypeParser.parerToList(const S: string; const carBrand: TCarBrand;
             cb(carBrand, carSys, carType);
           end;
           // write to file
-          FFileText.WriteLn_(carType.getSql());
+          FFileText.WriteLine(carType.getSql());
           //FFileText.WriteLn_( carType.updateGearSql() );
           // to cache
           FMapCarTypeRaw.Add(carId, carName);
@@ -253,24 +254,24 @@ begin
   carSysName := carSys.car_serie_name;
   //
   if bNew then begin
+    carTypeFileName := 'cartype_';
     //list year
     //https://www.che168.com/handler/usedcarlistv5.ashx?action=seriesYearList&area=china&brand=aodi&ls=aodiq3
     //all year
     //https://www.che168.com/handler/UsedCarListV5.ashx?action=speclist&area=china&brand=aodi&ls=aodia3
     url := 'https://www.che168.com/handler/UsedCarListV5.ashx?action=speclist&area=china&brand=%s&ls=%s';
     url := format(url, [brandSpell, carSysSpell]);
-    carTypeFileName := 'cartype_';
   end else begin
+    carTypeFileName := 'cartype';
     //https://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?seriesGroupType=2&needData=3&seriesid=3170
     //url := 'https://www.che168.com//Handler/SaleCar/ScriptCarList_V1.ashx?' +
     //  'seriesGroupType=2&needData=3&seriesid=' + carsysId;
     //https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=3&seriesid=3170
     url := 'https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=3&seriesid=%s';
     url := format(url, [carSys.RawId]);
-    carTypeFileName := 'cartype';
   end;
   fname := getSubDataDir(brandName + '\' + carSysName + '\' + carTypeFileName + '.txt');
-  S := getGBK(url, fname, false, cb);
+  S := getGBK(url, fname, true, cb);
   // do parse car-type
   //FCarTypePaser.parerToList(S, carBrand, carSys, doReqCarDetail, isDoNew);
   Result := S;

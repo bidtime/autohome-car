@@ -7,22 +7,21 @@ uses Classes;
 type
   TMyTextFile = class(TObject)
   private
-    procedure SetFileName(const S: string);
   protected
     FFileText: TTextWriter;
-    FFileName: string;
+    //FFileName: string;
     FWriteFile: boolean;
-    procedure Rewrite_; overload;
+    procedure CreateFile(const fileName: string); overload;
+    procedure SetWriteFile(const bWrite: boolean);
   public
-    constructor Create(const fileName: string); overload;
+    constructor Create();
     //constructor Create(const fileName: string; const writeF: boolean); overload;
     destructor Destroy; override;
-    procedure WriteLn_(const S: string);
-    //procedure WriteLnClose_(const S: string);
-    procedure Rewrite_(const bWrite: boolean); overload;
-    procedure CloseFile_;
+    procedure WriteLine(const S: string);
+    procedure CreateFile(const fileName: string; const bWrite: boolean); overload;
+    procedure CloseFile();
   public
-    property WriteFile: boolean read FWriteFile write FWriteFile;
+    property WriteFile: boolean read FWriteFile write SetWriteFile;
   end;
 
 implementation
@@ -31,9 +30,8 @@ uses SysUtils, uFileUtils;
 
 { TCarFile }
 
-constructor TMyTextFile.Create(const fileName: string);
+constructor TMyTextFile.Create();
 begin
-  SetFileName(fileName);
   FWriteFile := true;
 end;
 
@@ -48,54 +46,40 @@ destructor TMyTextFile.Destroy;
 begin
 end;
 
-procedure TMyTextFile.SetFileName(const S: string);
+{procedure TMyTextFile.SetFileName(const S: string);
 begin
-  FFileName := s;
-  //if (not FileExists(tmpFName)) then begin
-    //AssignFile(FFileText, FFileName);
-    //Rewrite(FFileText);
-  //end else begin
-  //  AssignFile(FFileCarType, tmpFName);
-  //  Append(FFileCarType);
-  //end;
-end;
+  FFileName := S;
+end;}
 
-procedure TMyTextFile.Rewrite_(const bWrite: boolean);
+procedure TMyTextFile.SetWriteFile(const bWrite: boolean);
 begin
   FWriteFile := bWrite;
-  Rewrite_();
 end;
 
-procedure TMyTextFile.Rewrite_();
+procedure TMyTextFile.CreateFile(const fileName: string; const bWrite: boolean);
+begin
+  FWriteFile := bWrite;
+  CreateFile(fileName);
+end;
+
+procedure TMyTextFile.CreateFile(const fileName: string);
 begin
   if FWriteFile then begin
-    TFileUtils.forceDirs(FFileName);
-    //AssignFile(FFileText, FFileName);
-    //Rewrite(FFileText);
-    FFileText := TStreamWriter.Create(FFileName, False);
+    TFileUtils.forceDirs(fileName);
+    FFileText := TStreamWriter.Create(fileName, False);
   end;
 end;
 
-procedure TMyTextFile.WriteLn_(const S: string);
+procedure TMyTextFile.WriteLine(const S: string);
 begin
   if FWriteFile then begin
-    //WriteLn(FFileText, s);
     FFileText.WriteLine(S);
   end;
 end;
 
-{procedure TMyTextFile.WriteLnClose_(const S: string);
+procedure TMyTextFile.CloseFile();
 begin
   if FWriteFile then begin
-    //WriteLn(FFileText, s);
-    //CloseFile(FFileText);
-  end;
-end;}
-
-procedure TMyTextFile.CloseFile_();
-begin
-  if FWriteFile then begin
-    //CloseFile(FFileText);
     FFileText.Close;
     FFileText.Free;
   end;

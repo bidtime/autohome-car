@@ -16,7 +16,7 @@ type
     procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
-    FPath, FBName, FFinishName: string;
+    FBName, FFinishName: string;
   public
     { Public declarations }
 
@@ -94,7 +94,7 @@ procedure TfrmSetting.setFPath(const S: string);
     end;
   end;
 begin
-  FPath := S;
+  //FPath := S;
   FBName := S + '\' + 'setting-brand.txt';
   FFinishName := S + '\' + 'setting-brand-end.txt';
   if FileExists(FBName) then begin

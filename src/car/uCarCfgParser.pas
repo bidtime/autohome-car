@@ -9,7 +9,7 @@ type
   TCarCfgParser = class(TCarParserBase)
   private
   public
-    constructor Create(const fileName: string);
+    constructor Create();
     destructor Destroy; override;
     //
     //property DicNewFactory: TDictionary<String, String> write FDicNewFactory;
@@ -29,9 +29,10 @@ uses System.json, uCharSplit, uMyTextFile, uStrUtils, uCarConfig;
 
 { TCarCfgParser }
 
-constructor TCarCfgParser.Create(const fileName: string);
+constructor TCarCfgParser.Create();
 begin
-  inherited create(fileName);
+  inherited create();
+  FFileName := 'car-type-cfg-all.txt';
 end;
 
 destructor TCarCfgParser.Destroy;
@@ -60,7 +61,7 @@ function TCarCfgParser.parerToList(const S: string; const carBrand: TCarBrand;
           carCfg.car_cfg_value := v;
           //
           if (checked) then begin
-            FFileText.WriteLn_(carCfg.getSql());
+            FFileText.WriteLine(carCfg.getSql());
           end;
         finally
           carCfg.Free;

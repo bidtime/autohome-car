@@ -11,12 +11,11 @@ type
     procedure parerToListOld(const S: string; brandProc: TGetBrandProc);
     procedure parerToListNew(const S: string; brandProc: TGetBrandProc);
   public
-    constructor Create(const fileName: string);
+    constructor Create();
     destructor Destroy; override;
     //
     procedure parerToList(const S: string; brandProc: TGetBrandProc; const bNew: boolean);
-    function reqParerToList(const url: string;
-      const bNew: boolean; const cb: TGetStrProc): string;
+    function reqParerToList(const url: string; const bNew: boolean; const cb: TGetStrProc): string;
     //procedure listBrandToStrs(strs: TStrings);
   end;
 
@@ -26,9 +25,10 @@ uses uCarBrand, System.json, uCharSplit, uMyTextFile;
 
 { TCarBrandParser }
 
-constructor TCarBrandParser.Create(const fileName: string);
+constructor TCarBrandParser.Create();
 begin
-  inherited create(fileName);
+  inherited create();
+  FFileName := 'car-brand-all.txt';
 end;
 
 destructor TCarBrandParser.Destroy;
@@ -63,7 +63,7 @@ procedure TCarBrandParser.parerToListNew(const S: string; brandProc: TGetBrandPr
   //listBrandToStrs(strs);
 
     function processOne(const jsonVal: TJSONValue): boolean;
-    var id, name, letter, spell: string;
+    var id, name, letters, spell: string;
       carBrand: TCarBrand;
     begin
       Result := true;
@@ -74,16 +74,16 @@ procedure TCarBrandParser.parerToListNew(const S: string; brandProc: TGetBrandPr
           jsonVal.TryGetValue<String>('id', id);
           jsonVal.TryGetValue<String>('name', name);
           jsonVal.TryGetValue<String>('pinyin', spell);
-          jsonVal.TryGetValue<String>('letters', letter);
+          jsonVal.TryGetValue<String>('letters', letters);
           //
           carBrand.car_brand_name := name;
           carBrand.rawId := id;
-          carBrand.short_code := letter;
-          carBrand.car_brand_code := carBrand.short_code;
-          carBrand.letter := spell;
+          carBrand.short_code := spell;
+          carBrand.car_brand_code := spell;
+          carBrand.letter := letters;
           //strs.add(id + #9 + letter + #9 + name + #9 + spell);
         end;
-        FFileText.WriteLn_(carBrand.getSql());
+        FFileText.WriteLine(carBrand.getSql());
         if Assigned(brandProc) then begin
           Result := brandProc(carBrand);
         end;
@@ -149,7 +149,7 @@ procedure TCarBrandParser.parerToListOld(const S: string; brandProc: TGetBrandPr
           carBrand.car_brand_code := carBrand.short_code;
           carBrand.letter := carBrand.short_code;
         end;
-        FFileText.WriteLn_(carBrand.getRow());
+        FFileText.WriteLine(carBrand.getSql());
         if Assigned(brandProc) then begin
           Result := brandProc(carBrand);
         end;
@@ -201,14 +201,14 @@ end;
 
 function TCarBrandParser.reqParerToList(const url: string; const bNew: boolean;
   const cb: TGetStrProc): string;
-var fname: string;
+var f_brandName: string;
 begin
   if bNew then begin
-    fname := getSubDataDir('get-car-brand_' + '.txt');
+    f_brandName := 'get-car-brand_';
   end else begin
-    fname := getSubDataDir('get-car-brand' + '.txt');
+    f_brandName := 'get-car-brand';
   end;
-  Result := getGBK(url, fname, false, cb);
+  Result := getGBK(url, getSubDataDir(f_brandName + '.txt'), false, cb);
 end;
 
 end.

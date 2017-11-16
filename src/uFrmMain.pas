@@ -51,7 +51,7 @@ type
     cbxPar: TCheckBox;
     cbxURL: TComboBox;
     cbxCarType: TCheckBox;
-    cbxTestCar: TCheckBox;
+    cbxBrand: TCheckBox;
     carUpdateSql1: TMenuItem;
     Splitter9: TSplitter;
     memoCarSysRmBrd: TMemo;
@@ -61,6 +61,7 @@ type
     Label1: TLabel;
     ToolButton4: TToolButton;
     setting1: TMenuItem;
+    cbxSerie: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure nGotoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -71,7 +72,6 @@ type
     { Private declarations }
     frmSetting: TfrmSetting;
     FUrlNew: boolean;
-    FDataDir: string;
     FCarBrandPaser: TCarBrandParser;
     FCarSysPaser: TCarSysParser;
     FCarTypePaser: TCarTypeParser;
@@ -81,13 +81,9 @@ type
     procedure setStatus(const S: string; const setCap: boolean=false;
       const tmSleep: integer=0);
     procedure doUrlEvent(const S: string);
-    procedure doUrlEvent2(const S: string);
     procedure addLog(const S: string);
-    class function getAppFileName(const S: string): string;
     procedure addLogMod(const S: string; const nmod: integer);
     function getStopFlag(): boolean;
-    class function getAppSubFile(const dir, S: string): string; static;
-    function getSubDataDir(const S: string): string;
     // brand
     procedure doReqBrand(const url: string; const brandOnly: boolean);
     // cartype
@@ -100,7 +96,6 @@ type
     function reqCarSysdRaw(const brand: TCarBrand;
       const brandOnly: boolean): boolean;
   public
-    { Public declarations }
   end;
 
 var
@@ -108,7 +103,8 @@ var
 
 implementation
 
-uses StrUtils, uCharSplit, System.json, Generics.Defaults, uCarConfig, uCarParam, uStrUtils;
+uses StrUtils, uCharSplit, System.json, Generics.Defaults, uCarConfig,
+  uCarParam, uStrUtils, uFileUtils;
 
 {$R *.dfm}
 
@@ -141,29 +137,14 @@ begin
   doReqBrand(url, false);
 end;
 
-class function TfrmMain.getAppFileName(const S: string): string;
-begin
-  Result := ExtractFilePath(Application.exeName) + S;
-end;
-
-class function TfrmMain.getAppSubFile(const dir, S: string): string;
-begin
-  Result := getAppFilename( dir + '\' + S);
-end;
-
 function TfrmMain.getStopFlag: boolean;
 begin
   Result := self.cbxStop.Checked;
 end;
 
-function TfrmMain.getSubDataDir(const S: string): string;
-begin
-  Result := getAppSubFile( FDataDir, S);
-end;
-
 procedure TfrmMain.addLogMod(const S: string; const nmod: integer);
 begin
-  memoLog.Lines.Add(IntToStr(memoLog.lines.count) + '.' + #9 + s);
+  memoLog.Lines.Add(IntToStr(memoLog.lines.count) + '.' + '  ' + s);
   self.setStatus(IntToStr(memoLog.Tag)+'/'+s);
 end;
 
@@ -202,7 +183,6 @@ begin
     carType.car_type_name + '/' +
     carType.RawId + '/' + carType.year_model;
   self.setStatus(str);
-  //self.doUrlEvent2(str);
   //
   FCarParParser.reqParerToList(carBrand, carSys, carType,
     cbxPar.checked, doUrlEvent);
@@ -226,7 +206,11 @@ function TfrmMain.reqCarSysdRaw(const brand: TCarBrand; const brandOnly: boolean
   begin
     S := FCarSysPaser.reqParerToList(carBrand, FUrlNew, doUrlEvent);
     // to parse car-system
-    FCarSysPaser.parerToList(S, carBrand, doReqCarType, FUrlNew);
+    if self.cbxCarType.Checked then begin
+      FCarSysPaser.parerToList(S, carBrand, doReqCarType, FUrlNew);
+    end else begin
+      FCarSysPaser.parerToList(S, carBrand, nil, FUrlNew);
+    end;
   end;
 
   function getHitInfo(const bHit: boolean): string;
@@ -247,7 +231,9 @@ begin
     brand.car_brand_name + ', ' + getHitInfo(bHit));
   if bHit then begin
     if not brandOnly then begin
-      doReqCarSys(brand);
+      if cbxSerie.Checked then begin
+        doReqCarSys(brand);
+      end;
     end;
   end;
   memoBrand.Lines.add(brand.getRow());
@@ -256,47 +242,75 @@ end;
 
 procedure TfrmMain.doReqBrand(const url: string; const brandOnly: boolean);
 
+  function getSubDir(const bNew: boolean): string;
+  begin
+    if bNew then begin
+      Result := 'ul_data';
+    end else begin
+      Result := 'ul_data';
+    end;
+  end;
+
+  procedure setDataSubDir(const S: string);
+  begin
+    FCarBrandPaser.DataSubDir := S;
+    FCarSysPaser.DataSubDir := S;
+    //
+    FCarTypePaser.DataSubDir := S;
+    FCarCfgParser.DataSubDir := S;
+    FCarParParser.DataSubDir := S;
+  end;
+
   function isNewUrl(): boolean;
   var url: string;
+    n: integer;
   begin
     url := self.cbxURL.Text;
     // http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist
-    if url.indexof('usedcarlistv5.ashx')>0 then begin
+    n := url.indexof('usedcarlistv5.ashx');
+    if n>0 then begin
       Result := true;
     end else begin  // http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?needData=1
       Result := false;
     end;
   end;
 var S: string;
+  DataDir: string;
 begin
   FUrlNew := isNewUrl();
+  DataDir := getSubDir(FUrlNew);
+  setDataSubDir(TFileUtils.mergeAppPath(DataDir));
   //
   memoBrand.clear;
   memoBrand.Lines.add(TCarBrand.getColumn());
   //
-  FCarBrandPaser.Rewrite_(true, TCarBrand.startTrans);
-  FCarSysPaser.Rewrite_(true, TCarSys.startTrans);
-  FCarTypePaser.Rewrite_(cbxCarType.Checked, TCarType.startTrans);
+  FCarBrandPaser.CreateFile(cbxBrand.Checked, TCarBrand.startTrans);
+  FCarSysPaser.CreateFile(cbxSerie.Checked, TCarSys.startTrans);
+  FCarTypePaser.CreateFile(cbxCarType.Checked, TCarType.startTrans);
   //
-  FCarParParser.Rewrite_(cbxPar.Checked, TCarParam.startTrans);
-  FCarCfgParser.Rewrite_(cbxCfg.Checked, TCarConfig.startTrans);
+  FCarParParser.CreateFile(cbxPar.Checked, TCarParam.startTrans);
+  FCarCfgParser.CreateFile(cbxCfg.Checked, TCarConfig.startTrans);
   //
   FCarTypePaser.MapCarTypeRaw.Clear;
   try
     FCarSysPaser.loadFactReplIt(memoFactRepl.Lines, FUrlNew);
     S := FCarBrandPaser.reqParerToList(url, FUrlNew, doUrlEvent);
-    if brandOnly then begin
-      FCarBrandPaser.parerToList(S, doOneBrandTest, FUrlNew);
+    if self.cbxBrand.Checked then begin
+      if brandOnly then begin
+        FCarBrandPaser.parerToList(S, doOneBrandTest, FUrlNew);
+      end else begin
+        FCarBrandPaser.parerToList(S, doOneBrand, FUrlNew);
+      end;
     end else begin
-      FCarBrandPaser.parerToList(S, doOneBrand, FUrlNew);
+      FCarBrandPaser.parerToList(S, nil, FUrlNew);
     end;
   finally
-    FCarBrandPaser.CloseFile_(TCarBrand.commit);
-    FCarSysPaser.CloseFile_(TCarSys.commit);
-    FCarTypePaser.CloseFile_(TCarType.commit);
+    FCarBrandPaser.CloseFile(TCarBrand.commit);
+    FCarSysPaser.CloseFile(TCarSys.commit);
+    FCarTypePaser.CloseFile(TCarType.commit);
     //
-    FCarParParser.CloseFile_(TCarParam.commit);
-    FCarCfgParser.CloseFile_(TCarConfig.commit);
+    FCarParParser.CloseFile(TCarParam.commit);
+    FCarCfgParser.CloseFile(TCarConfig.commit);
     //
     self.memoCtx.Lines.Add(IntToStr(memoCtx.lines.count)+ ', ' + 'all brand' + ', finish.');
   end;
@@ -307,37 +321,26 @@ begin
   addLog(S);
 end;
 
-procedure TfrmMain.doUrlEvent2(const S: string);
-begin
-  //addLog(S);
-end;
-
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  FDataDir := 'ul_data';
   //
   frmSetting := TfrmSetting.Create(self);
-  frmSetting.setFPath(self.getSubDataDir(''));
+  frmSetting.setFPath(TFileUtils.getAppPath());
   //
-  FCarBrandPaser := TCarBrandParser.Create(self.getSubDataDir('car-brand-all.txt'));
-  FCarBrandPaser.DataFullPath := self.getSubDataDir('');
+  FCarBrandPaser := TCarBrandParser.Create();
   FCarBrandPaser.StopFunc := getStopFlag;
   //
-  FCarSysPaser := TCarSysParser.Create(self.getSubDataDir('car-serie-all.txt'));
-  FCarSysPaser.DataFullPath := self.getSubDataDir('');
+  FCarSysPaser := TCarSysParser.Create();
   FCarSysPaser.StopFunc := getStopFlag;
   FCarSysPaser.loadCarSysRmBrd(memoCarSysRmBrd.Lines);
   //
-  FCarTypePaser := TCarTypeParser.Create(self.getSubDataDir('car-type-all.txt'));
-  FCarTypePaser.DataFullPath := self.getSubDataDir('');
+  FCarTypePaser := TCarTypeParser.Create();
   FCarTypePaser.StopFunc := getStopFlag;
   FCarTypePaser.loadDicVehType(memoVehType.Lines);
   FCarTypePaser.loadDicVehTypeId(memoVehTypeId.Lines);
   //
-  FCarCfgParser := TCarCfgParser.Create(self.getSubDataDir('car-type-cfg-all.txt'));
-  FCarCfgParser.DataFullPath := self.getSubDataDir('');
-  FCarParParser := TCarParParser.Create(self.getSubDataDir('car-type-par-all.txt'));
-  FCarParParser.DataFullPath := self.getSubDataDir('');
+  FCarCfgParser := TCarCfgParser.Create();
+  FCarParParser := TCarParParser.Create();
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);

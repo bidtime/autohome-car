@@ -14,7 +14,7 @@ type
     //procedure parerToListOldRaw(const S: string; const carBrand: TCarBrand; const carSys: TCarSys);
     //procedure parerToListNewRaw(const S: string; const carBrand: TCarBrand; const carSys: TCarSys);
   public
-    constructor Create(const fileName: string);
+    constructor Create();
     destructor Destroy; override;
     //procedure listBrandToStrs(strs: TStrings);
     procedure loadFactReplIt(const strs: TStrings; const bNew: boolean);
@@ -33,9 +33,10 @@ uses System.json, uCharSplit, uMyTextFile;
 
 { TCarSysParser }
 
-constructor TCarSysParser.Create(const fileName: string);
+constructor TCarSysParser.Create();
 begin
-  inherited create(fileName);
+  inherited create();
+  FFileName := 'car-serie-all.txt';
   FDicNewFactory := TDictionary<String, String>.create();
   FCarSysRmBrd := TDictionary<String, String>.create();
 end;
@@ -153,7 +154,7 @@ procedure TCarSysParser.parerToList(const S: string;
             //to lines
             //memoCarSys.Lines.Add(carSys.getRow());
             //to file
-            FFileText.WriteLn_(carSys.getSql());
+            FFileText.WriteLine(carSys.getSql());
             if Assigned(sysProc) then begin
               Result := sysProc(carBrand, carSys);
             end;
@@ -244,7 +245,7 @@ procedure TCarSysParser.parerToList(const S: string;
           //to lines
           //memoCarSys.Lines.Add(carSys.getRow());
           //to file
-          FFileText.WriteLn_(carSys.getSql());
+          FFileText.WriteLine(carSys.getSql());
           if Assigned(sysProc) then begin
             Result := sysProc(carBrand, carSys);
           end;
@@ -305,18 +306,18 @@ begin
   brandSpell := carBrand.ShortCode;
   //
   if bNew then begin
-    fname := getSubDataDir(brandName + '\' + 'carsys_' + '.txt');
-    //http://www.che168.com/handler/usedcarlistv5.ashx?action=serieslist&brand=aodi
-    url := 'https://www.che168.com/handler/usedcarlistv5.ashx?'
-      + 'action=serieslist&brand='+brandSpell;
+    fname := 'carsys_';
+    // http://www.che168.com/handler/usedcarlistv5.ashx?action=serieslist&brand=aodi
+    url := 'https://www.che168.com/handler/usedcarlistv5.ashx?action=serieslist&brand=%s';
+    url := format(url, [brandSpell]);
   end else begin
-    fname := getSubDataDir(brandName + '\' + 'carsys' + '.txt');
-    //http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=33
+    fname := 'carsys';
+    // http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=33
     //      https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=33
     url := 'https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=%s';
     url := format(url, [brandIdRaw]);
   end;
-  S := getGBK(url, fname, false, cb);
+  S := getGBK(url, getSubDataDir(brandName + '\' + fname + '.txt'), true, cb);
   Result := S;
   // to parse car-system
   //FCarSysPaser.parerToList(S, carBrand, doReqCarType, isDoNew());

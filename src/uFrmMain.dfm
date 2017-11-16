@@ -109,8 +109,28 @@ object frmMain: TfrmMain
       ImageIndex = 6
       Style = tbsSeparator
     end
-    object cbxCarType: TCheckBox
+    object cbxBrand: TCheckBox
       Left = 634
+      Top = 0
+      Width = 52
+      Height = 21
+      Caption = 'brand'
+      Checked = True
+      State = cbChecked
+      TabOrder = 4
+    end
+    object cbxSerie: TCheckBox
+      Left = 686
+      Top = 0
+      Width = 47
+      Height = 21
+      Caption = 'serie'
+      Checked = True
+      State = cbChecked
+      TabOrder = 7
+    end
+    object cbxCarType: TCheckBox
+      Left = 733
       Top = 0
       Width = 42
       Height = 21
@@ -120,7 +140,7 @@ object frmMain: TfrmMain
       TabOrder = 3
     end
     object cbxPar: TCheckBox
-      Left = 676
+      Left = 775
       Top = 0
       Width = 42
       Height = 21
@@ -130,25 +150,17 @@ object frmMain: TfrmMain
       TabOrder = 1
     end
     object cbxCfg: TCheckBox
-      Left = 718
+      Left = 817
       Top = 0
-      Width = 41
+      Width = 42
       Height = 21
       Caption = 'cfg'
       Checked = True
       State = cbChecked
       TabOrder = 5
     end
-    object cbxTestCar: TCheckBox
-      Left = 759
-      Top = 0
-      Width = 42
-      Height = 21
-      Caption = 'test'
-      TabOrder = 4
-    end
     object ToolButton4: TToolButton
-      Left = 801
+      Left = 859
       Top = 0
       Width = 8
       Caption = 'ToolButton4'
@@ -156,14 +168,14 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object Label1: TLabel
-      Left = 809
+      Left = 867
       Top = 0
       Width = 36
       Height = 21
       Caption = 'timeout'
     end
     object spedTimeout: TSpinEdit
-      Left = 845
+      Left = 903
       Top = 0
       Width = 51
       Height = 22

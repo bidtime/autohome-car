@@ -9,7 +9,7 @@ type
   TCarParParser = class(TCarParserBase)
   private
   public
-    constructor Create(const fileName: string);
+    constructor Create();
     destructor Destroy; override;
     //
     function reqParerToList(const carBrand: TCarBrand;
@@ -27,9 +27,10 @@ uses System.json, uCharSplit, uMyTextFile, uStrUtils, uCarParam;
 
 { TCarParParser }
 
-constructor TCarParParser.Create(const fileName: string);
+constructor TCarParParser.Create();
 begin
-  inherited create(fileName);
+  inherited create();
+  FFileName := 'car-type-par-all.txt';
 end;
 
 destructor TCarParParser.Destroy;
@@ -96,7 +97,7 @@ function TCarParParser.parerToList(const S: string; const carBrand: TCarBrand;
         carPar.car_param_name := k;
         carPar.car_param_value := v;
         if (checked) then begin
-          FFileText.WriteLn_(carPar.getSql());
+          FFileText.WriteLine(carPar.getSql());
         end;
       finally
         carPar.Free;
