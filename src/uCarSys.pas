@@ -90,7 +90,7 @@ begin
       QuotedStr(car_serie_code) + c +
       QuotedStr(car_serie_name) + c +
       QuotedStr(short_code) + c +
-      //nat_enum + c +
+      nat_enum + c +
       //'description' + c +
       //'remark' + c +
       state + c +

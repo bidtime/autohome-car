@@ -31,6 +31,7 @@ type
     function getGBK(const url, fname: string;
       const force: boolean=false;
         const cb: TGetStrProc=nil): String;
+    function isNew(const url: string): boolean;
   public
     property StopFunc: TBooleanFunc write FStopFunc;
     property DataSubDir: string write SetDataSubDir;
@@ -81,6 +82,18 @@ end;
 procedure TCarParserBase.SetDataSubDir(const subdir: string);
 begin
   FDataSubDir := subdir;
+end;
+
+function TCarParserBase.isNew(const url: string): boolean;
+var n: integer;
+begin
+  // http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist
+  n := url.indexof('usedcarlistv5.ashx');
+  if n>0 then begin
+    Result := true;
+  end else begin  // http://i.che168.com/Handler/SaleCar/ScriptCarList_V1.ashx?needData=1
+    Result := false;
+  end;
 end;
 
 function TCarParserBase.isStop: boolean;

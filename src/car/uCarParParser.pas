@@ -48,8 +48,13 @@ function TCarParParser.parerToList(const S: string; const carBrand: TCarBrand;
         carType.sug_price := v;
       end else if k.Equals('级别') then begin
       end else if k.Equals('上市时间') then begin
-        str := v+'.1';
-        carType.sale_date := str.Replace('.', '-');
+        if (v.Length>=6) then begin
+          str := v+'.1';
+          {if carType.RawId.Equals('1005493') then begin
+            carType.sale_date := str;
+          end;}
+          carType.sale_date := str.Replace('.', '-');
+        end;
       //end else if k.Equals('发动机') then begin
       //  carType.engine := v;
       //end else if k.Equals('变速箱') then begin
