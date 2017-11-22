@@ -312,7 +312,7 @@ begin
     FCarParParser.CloseFile(TCarParam.commit);
     FCarCfgParser.CloseFile(TCarConfig.commit);
     //
-    self.memoCtx.Lines.Add(IntToStr(memoCtx.lines.count)+ ', ' + 'all brand' + ', finish.');
+    self.memoCtx.Lines.Add(IntToStr(memoCtx.lines.count)+ ', ' + 'all brand' + ', finish');
   end;
 end;
 
