@@ -18,6 +18,7 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure setRawId(const n: string); virtual;
+    function  getUpdateOrgSql(): string;
   public
     property RawId: string read raw_id write setRawId;
   end;
@@ -40,6 +41,15 @@ end;
 
 destructor TCarData.Destroy;
 begin
+end;
+
+function TCarData.getUpdateOrgSql: string;
+begin
+  Result := '/** set org id' +
+    ' update ' + FTableName +
+    ' set orgId = 1' +
+    ' where org_id is null;' +
+    ' **/ '
 end;
 
 procedure TCarData.setRawId(const n: string);

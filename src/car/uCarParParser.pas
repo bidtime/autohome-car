@@ -8,6 +8,9 @@ uses SysUtils, classes, Generics.Collections, uCarBrand, uCarSys, uCarType,
 type
   TCarParParser = class(TCarParserBase)
   private
+    FMapCarTypeRaw: TDictionary<String, Int64>;
+    procedure loadStrs();
+    function getIdByName(const S: string): Int64;
   public
     constructor Create();
     destructor Destroy; override;
@@ -31,10 +34,33 @@ constructor TCarParParser.Create();
 begin
   inherited create();
   FFileName := 'car-type-par-all.txt';
+  FMapCarTypeRaw := TDictionary<String, Int64>.create;
+  loadStrs;
 end;
 
 destructor TCarParParser.Destroy;
 begin
+  FMapCarTypeRaw.Free;
+end;
+
+procedure TCarParParser.loadStrs;
+begin
+  FMapCarTypeRaw.Add('发动机', 67645657123151231);
+  FMapCarTypeRaw.Add('变速箱', 67645657123151232);
+  FMapCarTypeRaw.Add('基本参数', 67645657123151233);
+  FMapCarTypeRaw.Add('底盘转向', 67645657123151234);
+  FMapCarTypeRaw.Add('电动机', 67645657123151235);
+  FMapCarTypeRaw.Add('车身', 67645657123151236);
+  FMapCarTypeRaw.Add('车轮制动', 67645657123151237);
+end;
+
+function TCarParParser.getIdByName(const S: string): Int64;
+var b: boolean;
+begin
+  b := FMapCarTypeRaw.TryGetValue(S, result);
+  if not b then begin
+    Result := 0;
+  end;
 end;
 
 function TCarParParser.parerToList(const S: string; const carBrand: TCarBrand;
@@ -92,20 +118,20 @@ function TCarParParser.parerToList(const S: string; const carBrand: TCarBrand;
     typeName: string;
 
     procedure jsonItemToBean(const car_param_type_name: string; k,v: string);
-    var carPar: TCarParam;
+    var u: TCarParam;
     begin
-      carPar := TCarParam.create;
+      u := TCarParam.create;
       try
-        //carPar.car_param_id:= IntToStr(strs.Count);
-        carPar.car_type_id := carType.car_type_id;
-        carPar.car_param_type_name := car_param_type_name;
-        carPar.car_param_name := k;
-        carPar.car_param_value := v;
+        u.car_type_id := carType.car_type_id;
+        u.car_param_type_name := car_param_type_name;
+        u.car_param_type_id := getIdByName(car_param_type_name);
+        u.car_param_name := k;
+        u.car_param_value := v;
         if (checked) then begin
-          FFileText.WriteLine(carPar.getSql());
+          FFileText.WriteLine(u.getSql());
         end;
       finally
-        carPar.Free;
+        u.Free;
       end;
     end;
 

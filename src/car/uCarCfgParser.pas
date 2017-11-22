@@ -8,6 +8,9 @@ uses SysUtils, classes, Generics.Collections, uCarBrand, uCarSys, uCarType,
 type
   TCarCfgParser = class(TCarParserBase)
   private
+    FMapCarTypeRaw: TDictionary<String, Int64>;
+    procedure loadStrs();
+    function getIdByName(const S: string): Int64;
   public
     constructor Create();
     destructor Destroy; override;
@@ -33,10 +36,39 @@ constructor TCarCfgParser.Create();
 begin
   inherited create();
   FFileName := 'car-type-cfg-all.txt';
+  FMapCarTypeRaw := TDictionary<String, Int64>.create;
+  loadStrs();
 end;
 
 destructor TCarCfgParser.Destroy;
 begin
+  FMapCarTypeRaw.Free;
+end;
+
+procedure TCarCfgParser.loadStrs;
+begin
+  FMapCarTypeRaw.Add('主/被动安全装备', 62361026123151121);
+  FMapCarTypeRaw.Add('内部配置', 62361026123151122);
+  FMapCarTypeRaw.Add('外部/防盗配置', 62361026123151123);
+  FMapCarTypeRaw.Add('外部配置', 62361026123151124);
+  FMapCarTypeRaw.Add('多媒体配置', 62361026123151125);
+  FMapCarTypeRaw.Add('安全装备', 62361026123151126);
+  FMapCarTypeRaw.Add('座椅配置', 62361026123151127);
+  FMapCarTypeRaw.Add('操控配置', 62361026123151128);
+  FMapCarTypeRaw.Add('灯光配置', 62361026123151129);
+  FMapCarTypeRaw.Add('玻璃/后视镜', 62361026123151130);
+  FMapCarTypeRaw.Add('空调/冰箱', 62361026123151131);
+  FMapCarTypeRaw.Add('辅助/操控配置', 62361026123151132);
+  FMapCarTypeRaw.Add('高科技配置', 62361026123151133);
+end;
+
+function TCarCfgParser.getIdByName(const S: string): Int64;
+var b: boolean;
+begin
+  b := FMapCarTypeRaw.TryGetValue(S, result);
+  if not b then begin
+    Result := 0;
+  end;
 end;
 
 function TCarCfgParser.parerToList(const S: string; const carBrand: TCarBrand;
@@ -51,20 +83,21 @@ function TCarCfgParser.parerToList(const S: string; const carBrand: TCarBrand;
       typeName: string;
 
       procedure jsonItemToBean(const car_cfg_type_name: string; k,v: string);
-      var carCfg: TCarConfig;
+      var u: TCarConfig;
       begin
-        carCfg := TCarConfig.create;
+        u := TCarConfig.create;
         try
-          carCfg.car_type_id := carType.car_type_id;
-          carCfg.car_cfg_type_name := car_cfg_type_name;
-          carCfg.car_cfg_name := k;
-          carCfg.car_cfg_value := v;
+          u.car_type_id := carType.car_type_id;
+          u.car_cfg_type_name := car_cfg_type_name;
+          u.car_cfg_type_id := getIdByName(car_cfg_type_name);
+          u.car_cfg_name := k;
+          u.car_cfg_value := v;
           //
           if (checked) then begin
-            FFileText.WriteLine(carCfg.getSql());
+            FFileText.WriteLine(u.getSql());
           end;
         finally
-          carCfg.Free;
+          u.Free;
         end;
       end;
 

@@ -87,7 +87,7 @@ type
     // brand
     procedure doReqBrand(const url: string; const brandOnly: boolean);
     // cartype
-    function doReqCarType(const carBrand: TCarBrand; const carSys: TCarSys): boolean;
+    function doReqCarType(const carBrand: TCarBrand; var carSys: TCarSys): boolean;
     // detail
     function doReqCarDetail(const carBrand: TCarBrand; const carSys: TCarSys;
       var carType: TCarType): boolean;
@@ -191,7 +191,7 @@ begin
   Result := true;
 end;
 
-function TfrmMain.doReqCarType(const carBrand: TCarBrand; const carSys: TCarSys): boolean;
+function TfrmMain.doReqCarType(const carBrand: TCarBrand; var carSys: TCarSys): boolean;
 var S: string;
 begin
   S := FCarTypePaser.preParerToList(carBrand, carSys, FUrlNew, doUrlEvent);
