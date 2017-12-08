@@ -2,8 +2,6 @@ program autohome_car;
 
 uses
   Vcl.Forms,
-  uStrUtils in 'src\utils\uStrUtils.pas',
-  uCharSplit in 'src\utils\uCharSplit.pas',
   uCommEvents in 'src\car\uCommEvents.pas',
   uCarBase in 'src\car\uCarBase.pas',
   uCarData in 'src\car\uCarData.pas',
@@ -12,9 +10,6 @@ uses
   uCarType in 'src\uCarType.pas',
   uCarConfig in 'src\uCarConfig.pas',
   uCarParam in 'src\uCarParam.pas',
-  uMyTextFile in 'src\car\uMyTextFile.pas',
-  uNetHttpClt in 'src\utils\uNetHttpClt.pas',
-  uNetUtils in 'src\utils\uNetUtils.pas',
   uCarParserBase in 'src\car\uCarParserBase.pas',
   uCarBrandParser in 'src\car\uCarBrandParser.pas',
   uCarSysParser in 'src\car\uCarSysParser.pas',
@@ -23,7 +18,12 @@ uses
   uCarCfgParser in 'src\car\uCarCfgParser.pas',
   uFrmMain in 'src\uFrmMain.pas' {frmMain},
   uFrmSetting in 'src\uFrmSetting.pas' {frmSetting},
-  uFileUtils in 'src\utils\uFileUtils.pas';
+  uCharSplit in '..\..\..\git\bidtime\delphiutils\src\utils\uCharSplit.pas',
+  uMyTextFile in '..\..\..\git\bidtime\delphiutils\src\utils\uMyTextFile.pas',
+  uNetHttpClt in '..\..\..\git\bidtime\delphiutils\src\utils\uNetHttpClt.pas',
+  uNetUtils in '..\..\..\git\bidtime\delphiutils\src\utils\uNetUtils.pas',
+  uFileUtils in '..\..\..\git\bidtime\delphiutils\src\utils\uFileUtils.pas',
+  uStrUtils in '..\..\..\git\bidtime\delphiutils\src\utils\uStrUtils.pas';
 
 {$R *.res}
 
