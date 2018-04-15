@@ -18,12 +18,12 @@ uses
   uCarCfgParser in 'src\car\uCarCfgParser.pas',
   uFrmMain in 'src\uFrmMain.pas' {frmMain},
   uFrmSetting in 'src\uFrmSetting.pas' {frmSetting},
-  uCharSplit in '..\..\..\git\bidtime\delphiutils\src\utils\uCharSplit.pas',
-  uMyTextFile in '..\..\..\git\bidtime\delphiutils\src\utils\uMyTextFile.pas',
-  uNetHttpClt in '..\..\..\git\bidtime\delphiutils\src\utils\uNetHttpClt.pas',
-  uNetUtils in '..\..\..\git\bidtime\delphiutils\src\utils\uNetUtils.pas',
-  uFileUtils in '..\..\..\git\bidtime\delphiutils\src\utils\uFileUtils.pas',
-  uStrUtils in '..\..\..\git\bidtime\delphiutils\src\utils\uStrUtils.pas';
+  uCharSplit in '..\delphiutils\src\utils\uCharSplit.pas',
+  uMyTextFile in '..\delphiutils\src\utils\uMyTextFile.pas',
+  uNetHttpClt in '..\delphiutils\src\utils\uNetHttpClt.pas',
+  uNetUtils in '..\delphiutils\src\utils\uNetUtils.pas',
+  uFileUtils in '..\delphiutils\src\utils\uFileUtils.pas',
+  uStrUtils in '..\delphiutils\src\utils\uStrUtils.pas';
 
 {$R *.res}
 

@@ -75,6 +75,7 @@ begin
     'modify_time' + c +
     'creator_id' + c +
     'modifier_id' + c +
+    'org_id' + c +
     'raw_id';
 end;
 
@@ -97,9 +98,10 @@ begin
       (sort_no) + c +
       QuotedStr(create_time) + c +
       QuotedStr(modify_time) + c +
-      (creator_id) + c +
-      (modifier_id) + c +
-      (raw_id);
+      creator_id + c +
+      modifier_id + c +
+      org_id + c +
+      raw_id;
   end else begin
     Result :=
       car_serie_id + c +
@@ -119,6 +121,7 @@ begin
       modify_time + c +
       creator_id + c +
       modifier_id + c +
+      org_id + c +
       raw_id;
   end;
 end;

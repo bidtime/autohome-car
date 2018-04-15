@@ -76,6 +76,7 @@ begin
     'short_code' + c +
     'logo_url' + c +
     'blood_enum' + c +
+    'org_id' + c +
     'raw_id';
 end;
 
@@ -97,6 +98,7 @@ begin
       QuotedStr(short_code) + c +
       QuotedStr(logo_url) + c +
       blood_enum + c +
+      org_id + c +
       raw_id;
   end else begin
     Result :=
@@ -114,6 +116,7 @@ begin
       short_code + c +
       logo_url + c +
       blood_enum + c +
+      org_id + c +
       raw_id;
   end;
 end;

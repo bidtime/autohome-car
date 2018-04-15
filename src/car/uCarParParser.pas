@@ -71,7 +71,7 @@ function TCarParParser.parerToList(const S: string; const carBrand: TCarBrand;
   begin
     if itemName.Equals('基本参数') then begin
       if k.Equals('厂商指导价(元)') then begin
-        carType.sug_price := v;
+        carType.sug_price_str := v;
       end else if k.Equals('级别') then begin
       end else if k.Equals('上市时间') then begin
         if (v.Length>=6) then begin

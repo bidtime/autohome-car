@@ -14,6 +14,7 @@ type
     creator_id: string;
     modifier_id: string;
     raw_id: string;
+    org_id: string;
   public
     constructor Create;
     destructor Destroy; override;
@@ -37,6 +38,8 @@ begin
   modify_time := create_time;
   creator_id := '0';
   modifier_id := '0';
+  //
+  org_id := '1';
 end;
 
 destructor TCarData.Destroy;

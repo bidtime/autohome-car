@@ -1,4 +1,4 @@
-unit uCarType;
+﻿unit uCarType;
 
 interface
 
@@ -22,7 +22,8 @@ type
     sale_date: string;
     //out_date: string;
     //stop_date: string;
-    sug_price: string;
+    fsug_price: string;
+    fsug_price_str: string;
     year_model: string;
     fengine: string;
     gear: string;
@@ -32,6 +33,7 @@ type
     procedure setDisplay(const S: string);
     procedure setDispunit(const S: string);
     procedure setEngine(const S: string);
+    procedure setSugpriceStr(const S: string);
   public
     class constructor Create;
     constructor Create;
@@ -44,6 +46,7 @@ type
     property dispunit: string read fdispunit write setDispunit;
     property display: string read fdisplay write setDisplay;
     property engine: string read fengine write setEngine;
+    property sug_price_str: string read fsug_price_str write setSugpriceStr;
   end;
 
 implementation
@@ -84,6 +87,7 @@ begin
     'sale_date' + c +
     //'out_date' + c +
     //'stop_date' + c +
+    'sug_price_str' + c +
     'sug_price' + c +
     'year_model' + c +
     'engine' + c +
@@ -96,6 +100,7 @@ begin
     'modify_time' + c +
     'creator_id' + c +
     'modifier_id' + c +
+    'org_id' + c +
     'raw_id' + c +
     'dispunit' + c +
     'display';
@@ -162,7 +167,8 @@ begin
       null_str_val(sale_date) + c +
       //out_date + c +
       //stop_date + c +
-      QuotedStr(sug_price) + c +
+      QuotedStr(fsug_price_str) + c +
+      QuotedStr(fsug_price) + c +
       zero_val(year_model) + c +
       QuotedStr(fengine) + c +
       QuotedStr(gear) + c +
@@ -174,6 +180,7 @@ begin
       QuotedStr(modify_time) + c +
       creator_id + c +
       modifier_id + c +
+      org_id + c +
       raw_id + c +
       QuotedStr(fdispunit) + c +
       display_val(fdisplay);
@@ -192,7 +199,7 @@ begin
       getSaleDate() + c +
       //out_date + c +
       //stop_date + c +
-      sug_price + c +
+      sug_price_str + c +
       getyear() + c +
       engine.Replace(c, ' ') + c +
       gear + c +
@@ -204,6 +211,7 @@ begin
       modify_time + c +
       creator_id + c +
       modifier_id + c +
+      org_id + c +
       raw_id + c +
       fdispunit + c +
       fdisplay;}
@@ -229,6 +237,23 @@ procedure TCarType.setRawId(const S: string);
 begin
   raw_id := s;
   self.car_type_id := IntToStr(FMaxId + StrToInt(s));
+end;
+
+procedure TCarType.setSugpriceStr(const S: string);
+  function getLeftPrice(const S: string; const c: string): string;
+  var n: integer;
+  begin
+    n := S.IndexOf(c);
+    if (n>=0) then begin
+      Result := s.Substring(0, n);
+    end else begin
+      Result := '0';
+    end;
+  end;
+
+begin
+  fsug_price_str := S;
+  fsug_price := getLeftPrice(S, '万');
 end;
 
 {function TCarType.updateGearSql(): string;
