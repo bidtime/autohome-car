@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 192
   Top = 103
   Caption = 'frmMain'
-  ClientHeight = 594
-  ClientWidth = 1028
+  ClientHeight = 619
+  ClientWidth = 1118
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,35 +20,25 @@ object frmMain: TfrmMain
   TextHeight = 13
   object Splitter4: TSplitter
     Left = 0
-    Top = 219
-    Width = 1028
+    Top = 302
+    Width = 1118
     Height = 3
     Cursor = crVSplit
     Align = alBottom
     ExplicitTop = 22
     ExplicitWidth = 336
   end
-  object Splitter6: TSplitter
-    Left = 0
-    Top = 517
-    Width = 1028
-    Height = 3
-    Cursor = crVSplit
-    Align = alBottom
-    ExplicitLeft = 8
-    ExplicitTop = 539
-    ExplicitWidth = 862
-  end
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 1028
+    Width = 1118
     Height = 22
     ButtonHeight = 21
     ButtonWidth = 53
     Caption = 'ToolBar1'
     ShowCaptions = True
     TabOrder = 0
+    ExplicitWidth = 1028
     object ToolButton10: TToolButton
       Left = 0
       Top = 0
@@ -71,22 +61,38 @@ object frmMain: TfrmMain
           'http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlis' +
           't')
     end
-    object ToolButton2: TToolButton
+    object ToolButton5: TToolButton
       Left = 468
       Top = 0
-      Caption = 'go'
+      Width = 8
+      Caption = 'ToolButton5'
+      ImageIndex = 8
+      Style = tbsSeparator
+    end
+    object ToolButton2: TToolButton
+      Left = 476
+      Top = 0
+      Caption = 'brand'
       ImageIndex = 1
       OnClick = nGotoClick
     end
-    object ToolButton1: TToolButton
-      Left = 521
+    object ToolButton3: TToolButton
+      Left = 529
       Top = 0
-      Caption = 'do_brand'
+      Width = 8
+      Caption = 'ToolButton3'
+      ImageIndex = 8
+      Style = tbsSeparator
+    end
+    object ToolButton1: TToolButton
+      Left = 537
+      Top = 0
+      Caption = 'download'
       ImageIndex = 6
       OnClick = ToolButton1Click
     end
     object ToolButton8: TToolButton
-      Left = 574
+      Left = 590
       Top = 0
       Width = 8
       Caption = 'ToolButton8'
@@ -94,7 +100,7 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object cbxStop: TCheckBox
-      Left = 582
+      Left = 598
       Top = 0
       Width = 44
       Height = 21
@@ -102,7 +108,7 @@ object frmMain: TfrmMain
       TabOrder = 0
     end
     object ToolButton12: TToolButton
-      Left = 626
+      Left = 642
       Top = 0
       Width = 8
       Caption = '12'
@@ -110,7 +116,7 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object cbxBrand: TCheckBox
-      Left = 634
+      Left = 650
       Top = 0
       Width = 52
       Height = 21
@@ -120,7 +126,7 @@ object frmMain: TfrmMain
       TabOrder = 4
     end
     object cbxSerie: TCheckBox
-      Left = 686
+      Left = 702
       Top = 0
       Width = 47
       Height = 21
@@ -130,7 +136,7 @@ object frmMain: TfrmMain
       TabOrder = 7
     end
     object cbxCarType: TCheckBox
-      Left = 733
+      Left = 749
       Top = 0
       Width = 42
       Height = 21
@@ -140,7 +146,7 @@ object frmMain: TfrmMain
       TabOrder = 3
     end
     object cbxPar: TCheckBox
-      Left = 775
+      Left = 791
       Top = 0
       Width = 42
       Height = 21
@@ -150,7 +156,7 @@ object frmMain: TfrmMain
       TabOrder = 1
     end
     object cbxCfg: TCheckBox
-      Left = 817
+      Left = 833
       Top = 0
       Width = 42
       Height = 21
@@ -160,7 +166,7 @@ object frmMain: TfrmMain
       TabOrder = 5
     end
     object ToolButton4: TToolButton
-      Left = 859
+      Left = 875
       Top = 0
       Width = 8
       Caption = 'ToolButton4'
@@ -168,14 +174,14 @@ object frmMain: TfrmMain
       Style = tbsSeparator
     end
     object Label1: TLabel
-      Left = 867
+      Left = 883
       Top = 0
       Width = 36
       Height = 21
       Caption = 'timeout'
     end
     object spedTimeout: TSpinEdit
-      Left = 903
+      Left = 919
       Top = 0
       Width = 51
       Height = 22
@@ -188,8 +194,8 @@ object frmMain: TfrmMain
   object memoCtx: TMemo
     Left = 0
     Top = 22
-    Width = 1028
-    Height = 197
+    Width = 1118
+    Height = 280
     Align = alClient
     Lines.Strings = (
       
@@ -204,138 +210,131 @@ object frmMain: TfrmMain
         #36842'RS 7,100006,'#20854#20182' '#22885#36842'200,100007,'#20854#20182' '#22885#36842'100,100014,'#20854#20182' Allroad'#39';')
     ScrollBars = ssBoth
     TabOrder = 1
+    ExplicitWidth = 1028
+    ExplicitHeight = 197
   end
   object Panel1: TPanel
     Left = 0
-    Top = 222
-    Width = 1028
+    Top = 305
+    Width = 1118
     Height = 295
     Align = alBottom
     Caption = 'Panel1'
     TabOrder = 2
-    object Splitter2: TSplitter
-      Left = 93
-      Top = 1
-      Height = 293
-      Align = alRight
-      ExplicitLeft = 332
-      ExplicitHeight = 215
-    end
-    object Splitter3: TSplitter
-      Left = 1024
-      Top = 1
-      Height = 293
-      Align = alRight
-      ExplicitLeft = 765
-      ExplicitTop = 3
-    end
+    ExplicitTop = 222
+    ExplicitWidth = 1028
     object Splitter1: TSplitter
-      Left = 632
+      Left = 820
       Top = 1
       Height = 293
       Align = alRight
-      ExplicitLeft = 682
-      ExplicitTop = -15
-    end
-    object Splitter5: TSplitter
-      Left = 855
-      Top = 1
-      Height = 293
-      Align = alRight
-      ExplicitLeft = 735
+      ExplicitLeft = 787
       ExplicitTop = 3
+    end
+    object Splitter9: TSplitter
+      Left = 1028
+      Top = 1
+      Height = 293
+      Align = alRight
+      ExplicitLeft = 972
+      ExplicitTop = -4
+    end
+    object Splitter8: TSplitter
+      Left = 668
+      Top = 1
+      Height = 293
+      Align = alRight
+      ExplicitLeft = 748
+      ExplicitTop = -4
+    end
+    object Splitter7: TSplitter
+      Left = 957
+      Top = 1
+      Height = 293
+      Align = alRight
+      ExplicitLeft = 918
+      ExplicitTop = -4
     end
     object memoLog: TMemo
       Left = 1
       Top = 1
-      Width = 92
+      Width = 667
       Height = 293
       Align = alClient
       ScrollBars = ssHorizontal
       TabOrder = 0
+      ExplicitWidth = 92
     end
-    object memoCarSys: TMemo
-      Left = 635
+    object memoCarSysRmBrd: TMemo
+      Left = 1031
       Top = 1
-      Width = 220
+      Width = 86
       Height = 293
       Align = alRight
+      Lines.Strings = (
+        #36710#31995#9#21697#29260
+        #21271#20140'40'#9#21271#20140)
       ScrollBars = ssHorizontal
       TabOrder = 1
+      ExplicitLeft = 1030
     end
-    object memoBrand: TMemo
-      Left = 96
+    object memoVehTypeId: TMemo
+      Left = 960
       Top = 1
-      Width = 536
+      Width = 68
       Height = 293
       Align = alRight
+      Lines.Strings = (
+        'SUV'#9'1'
+        'MPV'#9'2'
+        #36305#36710#9'3'
+        #23567#24494#22411#9'4'
+        #32039#20945#22411#36710#9'5'
+        #20013#22411#36710#9'6'
+        #20013#22823#22411#36710#9'7'
+        #22823#22411#36710#9'8'
+        #20854#20182#9'9')
       ScrollBars = ssHorizontal
       TabOrder = 2
+      ExplicitLeft = 959
     end
-    object memoCarType: TMemo
-      Left = 858
+    object memoVehType: TMemo
+      Left = 823
       Top = 1
-      Width = 166
+      Width = 134
       Height = 293
       Align = alRight
+      Lines.Strings = (
+        #28304#32423#21035#9#26032#32423#21035
+        #32039#20945#22411#36710#9#32039#20945#22411#36710
+        #20013#22411#36710#9#20013#22411#36710
+        #20013#22823#22411#36710#9#20013#22823#22411#36710
+        #32039#20945#22411'SUV'#9'SUV'
+        #20013#22411'SUV'#9'SUV'
+        #23567#22411#36710#9#23567#24494#22411
+        #22823#22411#36710#9#22823#22411#36710
+        #20013#22823#22411'SUV'#9'SUV'
+        #36305#36710#9#36305#36710
+        #36731#23458#9#22823#22411#36710
+        #23567#22411'SUV'#9'SUV'
+        'MPV'#9'MPV'
+        #24494#38754#9#20854#20182
+        #24494#22411#36710#9#23567#24494#22411
+        #24494#21345#9#20854#20182
+        #20302#31471#30382#21345#9#20854#20182
+        #22823#22411'SUV'#9'SUV'
+        #39640#31471#30382#21345#9#20854#20182
+        #9#20854#23427)
       ScrollBars = ssHorizontal
       TabOrder = 3
-    end
-  end
-  object StatusBar1: TStatusBar
-    Left = 0
-    Top = 575
-    Width = 1028
-    Height = 19
-    Panels = <
-      item
-        Width = 50
-      end>
-  end
-  object Panel2: TPanel
-    Left = 0
-    Top = 520
-    Width = 1028
-    Height = 55
-    Align = alBottom
-    TabOrder = 4
-    object Splitter7: TSplitter
-      Left = 875
-      Top = 1
-      Height = 53
-      Align = alRight
-      ExplicitLeft = 673
-      ExplicitTop = 6
-    end
-    object Splitter8: TSplitter
-      Left = 738
-      Top = 1
-      Height = 53
-      Align = alRight
-      ExplicitLeft = 488
-      ExplicitTop = 6
-    end
-    object Splitter9: TSplitter
-      Left = 632
-      Top = 1
-      Height = 53
-      Align = alRight
-      ExplicitLeft = 290
-      ExplicitTop = -4
-    end
-    object Splitter10: TSplitter
-      Left = 518
-      Top = 1
-      Height = 53
-      Align = alRight
-      ExplicitLeft = 407
-      ExplicitTop = 2
+      ExplicitLeft = 741
+      ExplicitHeight = 53
     end
     object memoFactRepl: TMemo
-      Left = 878
+      Left = 671
       Top = 1
       Width = 149
-      Height = 53
+      Height = 293
       Align = alRight
       Lines.Strings = (
         'brandName'#9'Manufactor'#9'CarSysName'#9#26367#25442#26032#20027#26426#21378
@@ -373,69 +372,22 @@ object frmMain: TfrmMain
         #19968#27773#9#20854#20182#9#22799#21033'2000'#9#22825#27941#19968#27773
         #20016#30000#9#20854#20182#9#20339#32654#9#20016#30000'('#36827#21475')')
       ScrollBars = ssHorizontal
-      TabOrder = 0
+      TabOrder = 4
+      ExplicitLeft = 546
+      ExplicitTop = -4
     end
-    object memoVehType: TMemo
-      Left = 741
-      Top = 1
-      Width = 134
-      Height = 53
-      Align = alRight
-      Lines.Strings = (
-        #28304#32423#21035#9#26032#32423#21035
-        #32039#20945#22411#36710#9#32039#20945#22411#36710
-        #20013#22411#36710#9#20013#22411#36710
-        #20013#22823#22411#36710#9#20013#22823#22411#36710
-        #32039#20945#22411'SUV'#9'SUV'
-        #20013#22411'SUV'#9'SUV'
-        #23567#22411#36710#9#23567#24494#22411
-        #22823#22411#36710#9#22823#22411#36710
-        #20013#22823#22411'SUV'#9'SUV'
-        #36305#36710#9#36305#36710
-        #36731#23458#9#22823#22411#36710
-        #23567#22411'SUV'#9'SUV'
-        'MPV'#9'MPV'
-        #24494#38754#9#20854#20182
-        #24494#22411#36710#9#23567#24494#22411
-        #24494#21345#9#20854#20182
-        #20302#31471#30382#21345#9#20854#20182
-        #22823#22411'SUV'#9'SUV'
-        #39640#31471#30382#21345#9#20854#20182
-        #9#20854#23427)
-      ScrollBars = ssHorizontal
-      TabOrder = 1
-    end
-    object memoVehTypeId: TMemo
-      Left = 635
-      Top = 1
-      Width = 103
-      Height = 53
-      Align = alRight
-      Lines.Strings = (
-        'SUV'#9'1'
-        'MPV'#9'2'
-        #36305#36710#9'3'
-        #23567#24494#22411#9'4'
-        #32039#20945#22411#36710#9'5'
-        #20013#22411#36710#9'6'
-        #20013#22823#22411#36710#9'7'
-        #22823#22411#36710#9'8'
-        #20854#20182#9'9')
-      ScrollBars = ssHorizontal
-      TabOrder = 2
-    end
-    object memoCarSysRmBrd: TMemo
-      Left = 521
-      Top = 1
-      Width = 111
-      Height = 53
-      Align = alRight
-      Lines.Strings = (
-        #36710#31995#9#21697#29260
-        #21271#20140'40'#9#21271#20140)
-      ScrollBars = ssHorizontal
-      TabOrder = 3
-    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 600
+    Width = 1118
+    Height = 19
+    Panels = <
+      item
+        Width = 50
+      end>
+    ExplicitTop = 575
+    ExplicitWidth = 1028
   end
   object MainMenu1: TMainMenu
     Left = 86

@@ -208,7 +208,7 @@ begin
   end else begin
     f_brandName := 'get-car-brand';
   end;
-  Result := getGBK(url, getSubDataDir(f_brandName + '.txt'), false, cb);
+  Result := getGBK(url, getSubDataDir(f_brandName + '.txt'), cb);
 end;
 
 end.

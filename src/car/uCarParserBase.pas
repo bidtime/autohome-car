@@ -12,6 +12,7 @@ type
     FFileText: TMyTextFile;
     FStopFunc: TBooleanFunc;
     FDataSubDir: string;
+    FForceDownload: boolean;
     function isStop(): boolean;
     procedure SetDataSubDir(const subdir: string);
   public
@@ -29,12 +30,12 @@ type
       const encode: TEncoding; const force: boolean=false;
         const cb: TGetStrProc=nil): String;
     function getGBK(const url, fname: string;
-      const force: boolean=false;
-        const cb: TGetStrProc=nil): String;
+      const cb: TGetStrProc=nil): String;
     function isNew(const url: string): boolean;
   public
     property StopFunc: TBooleanFunc write FStopFunc;
     property DataSubDir: string write SetDataSubDir;
+    property ForceDownload: boolean write FForceDownload;
   end;
 
 implementation
@@ -46,6 +47,8 @@ uses uCharSplit, uNetHttpClt;
 constructor TCarParserBase.Create();
 begin
   inherited create;
+  // force download
+  FForceDownload := false;
   FFileText := TMyTextFile.Create();
 end;
 
@@ -68,11 +71,17 @@ begin
   Result := g_NetHttpClt.get(url, fname, encode, force, cb);
 end;
 
-function TCarParserBase.getGBK(const url, fname: string; const force: boolean;
+function TCarParserBase.getGBK(const url, fname: string;
+  const cb: TGetStrProc): String;
+begin
+  Result := get(url, fname, TEncoding.GetEncoding(936), FForceDownload, cb);
+end;
+
+{function TCarParserBase.getGBK(const url, fname: string; const force: boolean;
   const cb: TGetStrProc): String;
 begin
   Result := get(url, fname, TEncoding.GetEncoding(936), force, cb);
-end;
+end;}
 
 function TCarParserBase.getSubDataDir(const s: string): string;
 begin

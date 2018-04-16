@@ -181,7 +181,7 @@ function TCarCfgParser.reqParerToList(//const clt: TNetHttpClt;
     url := geUrlOfCarTypeId(carRawId);
     if not SameText(url, '') then begin
       fname := getFNameOfCarTypeId(carRawId);
-      S := getGBK(url, fname, false, cb);
+      S := getGBK(url, fname, cb);
       str := preProcessA(S);
       //
       self.parerToList(str, carBrand, carSys, carType, checked);

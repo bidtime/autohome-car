@@ -18,12 +18,7 @@ type
     ToolButton12: TToolButton;
     memoCtx: TMemo;
     Panel1: TPanel;
-    Splitter2: TSplitter;
-    Splitter3: TSplitter;
     memoLog: TMemo;
-    memoCarSys: TMemo;
-    memoBrand: TMemo;
-    memoCarType: TMemo;
     MainMenu1: TMainMenu;
     N1: TMenuItem;
     nGoto: TMenuItem;
@@ -33,35 +28,33 @@ type
     H1: TMenuItem;
     A1: TMenuItem;
     StatusBar1: TStatusBar;
-    Splitter1: TSplitter;
     Splitter4: TSplitter;
     ToolButton1: TToolButton;
     ToolButton8: TToolButton;
-    memoFactRepl: TMemo;
-    Splitter5: TSplitter;
-    Panel2: TPanel;
-    Splitter6: TSplitter;
-    Splitter7: TSplitter;
-    memoVehType: TMemo;
     carTypeSql1: TMenuItem;
     cfgSql1: TMenuItem;
     N3: TMenuItem;
-    Splitter8: TSplitter;
-    memoVehTypeId: TMemo;
     cbxPar: TCheckBox;
     cbxURL: TComboBox;
     cbxCarType: TCheckBox;
     cbxBrand: TCheckBox;
     carUpdateSql1: TMenuItem;
-    Splitter9: TSplitter;
-    memoCarSysRmBrd: TMemo;
     cbxCfg: TCheckBox;
-    Splitter10: TSplitter;
     spedTimeout: TSpinEdit;
     Label1: TLabel;
     ToolButton4: TToolButton;
     setting1: TMenuItem;
     cbxSerie: TCheckBox;
+    Splitter1: TSplitter;
+    memoCarSysRmBrd: TMemo;
+    Splitter9: TSplitter;
+    memoVehTypeId: TMemo;
+    memoVehType: TMemo;
+    Splitter8: TSplitter;
+    memoFactRepl: TMemo;
+    Splitter7: TSplitter;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure nGotoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -236,7 +229,7 @@ begin
       end;
     end;
   end;
-  memoBrand.Lines.add(brand.getRow());
+  //memoBrand.Lines.add(brand.getRow());
   Result := true;
 end;
 
@@ -281,8 +274,8 @@ begin
   DataDir := getSubDir(FUrlNew);
   setDataSubDir(TFileUtils.mergeAppPath(DataDir));
   //
-  memoBrand.clear;
-  memoBrand.Lines.add(TCarBrand.getColumn());
+  //memoBrand.clear;
+  //memoBrand.Lines.add(TCarBrand.getColumn());
   //
   FCarBrandPaser.CreateFile(cbxBrand.Checked, TCarBrand.startTrans);
   FCarSysPaser.CreateFile(cbxSerie.Checked, TCarSys.startTrans);
@@ -340,7 +333,10 @@ begin
   FCarTypePaser.loadDicVehTypeId(memoVehTypeId.Lines);
   //
   FCarCfgParser := TCarCfgParser.Create();
+  //FCarCfgParser.ForceDownload := false;
+  //
   FCarParParser := TCarParParser.Create();
+  //FCarParParser.ForceDownload := false;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);

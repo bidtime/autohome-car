@@ -271,7 +271,7 @@ begin
     url := format(url, [carSys.RawId]);
   end;
   fname := getSubDataDir(brandName + '\' + carSysName + '\' + carTypeFileName + '.txt');
-  S := getGBK(url, fname, true, cb);
+  S := getGBK(url, fname, cb);
   // do parse car-type
   //FCarTypePaser.parerToList(S, carBrand, carSys, doReqCarDetail, isDoNew);
   Result := S;

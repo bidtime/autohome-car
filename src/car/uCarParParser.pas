@@ -210,7 +210,7 @@ function TCarParParser.reqParerToList(//const clt: TNetHttpClt;
     url := geUrlOfCarTypeId(carTypeId);
     if not SameText(url, '') then begin
       fname := getFNameOfCarTypeId(carTypeId);
-      S := getGBK(url, fname, false, cb);
+      S := getGBK(url, fname, cb);
       str := preProcessA(S);
       self.parerToList(str, carBrand, carSys, carType, checked);
     end;

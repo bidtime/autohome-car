@@ -317,7 +317,7 @@ begin
     url := 'https://www.che168.com/Handler/ScriptCarList_V1.ashx?seriesGroupType=2&needData=2&bid=%s';
     url := format(url, [brandIdRaw]);
   end;
-  S := getGBK(url, getSubDataDir(brandName + '\' + fname + '.txt'), true, cb);
+  S := getGBK(url, getSubDataDir(brandName + '\' + fname + '.txt'), cb);
   Result := S;
   // to parse car-system
   //FCarSysPaser.parerToList(S, carBrand, doReqCarType, isDoNew());
