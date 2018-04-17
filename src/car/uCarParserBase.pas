@@ -48,7 +48,7 @@ constructor TCarParserBase.Create();
 begin
   inherited create;
   // force download
-  FForceDownload := false;
+  FForceDownload := true;
   FFileText := TMyTextFile.Create();
 end;
 

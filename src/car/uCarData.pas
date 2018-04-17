@@ -39,7 +39,7 @@ begin
   creator_id := '0';
   modifier_id := '0';
   //
-  org_id := '1';
+  org_id := '10';
 end;
 
 destructor TCarData.Destroy;

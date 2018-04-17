@@ -168,7 +168,9 @@ begin
   JsonRoot := TJSONObject.ParseJSONValue(S) as TJSONObject ;
   try
     JsonResult := JsonRoot.GetValue('result') as TJsonObject;
-    doParamTypeItems(JsonResult);
+    if (JsonResult<>nil) then begin
+      doParamTypeItems(JsonResult);
+    end;
     Result := true;
   finally
     JsonRoot.Free;
